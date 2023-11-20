@@ -45,11 +45,11 @@ def add_payment(form: PaymentSchema):
     
     # Loading the prediction model
     ml_path = 'ml_model/atp_predict.pkl'
-    model = Model.load_model(ml_path)
+    #model = Model.loadModel(ml_path)
     
     payment = Payment(
         surface = form.surface,
-        year = form.surface,
+        year = form.year,
         tourney_level = form.tourney_level,
         best_of_x_sets = form.best_of_x_sets,
         tourney_round = form.tourney_round,
@@ -67,7 +67,7 @@ def add_payment(form: PaymentSchema):
         second_rank_points = form.second_rank_points,
         second_age = form.second_age,
         second_height = form.second_height,
-        winner_code = Model.predictor(model, form)
+        winner_code = 1 #Model.predictor(model, form)
     )
     
     logger.debug(f"Added Match between '{payment.first_name}' and '{payment.second_name}'.")
@@ -101,51 +101,54 @@ def edit_payment(query: PaymentSearchSchema, form: PaymentSchema,):
     Returns the representation of the edited Payment (as per PaymentViewSchema).
     """
     edited_match_id = query.id
-    logger.debug(f"Edited Match between '{payment.first_name}' and '{payment.second_name}'.")
+    logger.debug(f"Editing Match #{edited_match_id} between '{form.first_name}' and '{form.second_name}'.")
+    
+    # Loading the prediction model
+    ml_path = 'ml_model/atp_predict.pkl'
+    #model = Model.loadModel(ml_path)
     
     try:
         # Creates database connection
-        logger.debug(f"Editing Match #{edited_match_id}")
         session = Session()
         
         # Selects item to edit it in the database table and then commits it
-        database_match_to_edit = session.query(Payment).filter(Payment.id == edited_match_id).first()
-        database_match_to_edit.surface = form.surface,
-        database_match_to_edit.year = form.surface,
-        database_match_to_edit.tourney_level = form.tourney_level,
-        database_match_to_edit.best_of_x_sets = form.best_of_x_sets,
-        database_match_to_edit.tourney_round = form.tourney_round,
-        database_match_to_edit.first_name = form.first_name,
-        database_match_to_edit.first_hand = form.first_hand,
-        database_match_to_edit.first_id = form.first_id,
-        database_match_to_edit.first_rank = form.first_rank,
-        database_match_to_edit.first_rank_points = form.first_rank_points,
-        database_match_to_edit.first_age = form.first_age,
-        database_match_to_edit.first_height = form.first_height,
-        database_match_to_edit.second_name = form.second_name,
-        database_match_to_edit.second_hand = form.second_hand,
-        database_match_to_edit.second_id = form.second_id,
-        database_match_to_edit.second_rank = form.second_rank,
-        database_match_to_edit.second_rank_points = form.second_rank_points,
-        database_match_to_edit.second_age = form.second_age,
-        database_match_to_edit.second_height = form.second_height,
+        to_edit = session.query(Payment).filter(Payment.id == edited_match_id).first()
+        to_edit.surface = form.surface
+        to_edit.year = form.year
+        to_edit.tourney_level = form.tourney_level
+        to_edit.best_of_x_sets = form.best_of_x_sets
+        to_edit.tourney_round = form.tourney_round
+        to_edit.first_name = form.first_name
+        to_edit.first_hand = form.first_hand
+        to_edit.first_id = form.first_id
+        to_edit.first_rank = form.first_rank
+        to_edit.first_rank_points = form.first_rank_points
+        to_edit.first_age = form.first_age
+        to_edit.first_height = form.first_height
+        to_edit.second_name = form.second_name
+        to_edit.second_hand = form.second_hand
+        to_edit.second_id = form.second_id
+        to_edit.second_rank = form.second_rank
+        to_edit.second_rank_points = form.second_rank_points
+        to_edit.second_age = form.second_age
+        to_edit.second_height = form.second_height
 
-        winner_code = Model.predictor(model, form)  #FIXME: encode necessary form fields before sending to predictor
-        database_match_to_edit.winner = Payment.getUncodedWinner(winner_code, form)
+        winner_code = 0 #Model.predictor(model, form)  #FIXME: encode necessary form fields before sending to predictor
+        to_edit.winner = Payment.getUncodedWinner(winner_code, form)
 
         session.commit()
         
-        return show_payment(database_match_to_edit), 200
+        return show_payment(to_edit), 200
 
     except IntegrityError as e:
         error_msg = "Integrity error on new Match addition :/"
-        logger.warning(f"Error while editing Match #{payment.id} between '{payment.first_name}' and '{payment.second_name}': {error_msg}")
+        logger.warning(f"Error while editing Match #{to_edit.id} between '{to_edit.first_name}' and '{to_edit.second_name}': {error_msg}")
         return {"message": error_msg}, 409
 
     except Exception as e:
         # in case of a non-expected error
         error_msg = "It was not possible to save the new Match :/"
-        logger.warning(f"Error while editing Match #{payment.id} between '{payment.first_name}' and '{payment.second_name}': {error_msg}")
+        logger.warning(f"Error while editing Match #{to_edit.id} between '{to_edit.first_name}' and '{to_edit.second_name}': {error_msg}")
         return {"message": error_msg}, 400
 
 

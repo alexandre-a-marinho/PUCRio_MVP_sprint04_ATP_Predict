@@ -3,16 +3,27 @@
   Global Variables
   --------------------------------------------------------------------------------------
 */
-let exchange_rate;
 const attributes = Object.freeze({
   Id: 1, 
-  Description: 2,
-  Category: 3,
-  Subcategory: 4,
-  Value: 5,
-  Exchange_Value: 6,
-  NbInstallments: 7,
-  InsertionDate: 8
+  Surface: 2,
+  TourneyYear: 3,
+  TourneyLevel: 4,
+  BestOfXSets: 5,
+  TourneyRound: 6,
+  FirstName: 7,
+  FisrtId: 8,
+  FirstRank: 9,
+  FirstRankPoints: 10,
+  FirstHand: 11,
+  FirstHeight: 12,
+  FirstAge: 13,
+  SecondId: 14,
+  SecondRank: 15,
+  SecondRankPoints: 16,
+  SecondHand: 17,
+  SecondHeight: 18,
+  SecondAge: 19,
+  Winner: 20
 });
 
 
@@ -31,11 +42,25 @@ const getItem = async function (item_id) {
     .then((response) => response.json())
     .then((data) => {
       item.id = data.id;
-      item.description = data.description;
-      item.category = data.category;
-      item.subcategory = data.subcategory;
-      item.value = data.value;
-      item.nb_installments = data.nb_installments;
+      item.surface = data.surface;
+      item.year = data.year;
+      item.tourney_level = data.tourney_level;
+      item.best_of_x_sets = data.best_of_x_sets;
+      item.first_name = data.first_name;
+      item.first_id = data.first_id;
+      item.first_rank = data.first_rank;
+      item.first_rank_points = data.first_rank_points;
+      item.first_hand = data.first_hand;
+      item.first_height = data.first_height;
+      item.first_age = data.first_age;
+      item.second_name = data.second_name;
+      item.second_id = data.second_id;
+      item.second_rank = data.second_rank;
+      item.second_rank_points = data.second_rank_points;
+      item.second_hand = data.second_hand;
+      item.second_height = data.second_height;
+      item.second_age = data.second_age;
+      item.winner = data.winner;
     })
 
   return item;
@@ -47,7 +72,6 @@ const getItem = async function (item_id) {
   --------------------------------------------------------------------------------------
 */
 const getList = async () => {
-  await updateExchangeRate();
 
   let url = 'http://127.0.0.1:5000/payments';
   await fetch(url, {
@@ -55,9 +79,13 @@ const getList = async () => {
   })
     .then((response) => response.json())
     .then((data) => {
-      data.payments.forEach(item => insertItemInterface(item.id, item.description, item.category,
-                                                        item.subcategory, item.value, item.nb_installments,
-                                                        item.insertion_date));
+      data.payments.forEach(item => insertItemInterface(item.id, item.surface, item.year,
+                                                        item.tourney_level, item.best_of_x_sets, item.tourney_round,
+                                                        item.first_name, item.first_id, item.first_rank, item.first_rank_points,
+                                                        item.first_hand, item.first_height, item.first_age,
+                                                        item.second_name, item.second_id, item.second_rank, item.second_rank_points,
+                                                        item.second_hand, item.second_height, item.second_age,
+                                                        item.winner));
       connectDeleteFunctionsToButtons();
       connectEditFunctionsToButtons();
     })
@@ -73,44 +101,25 @@ const getList = async () => {
   --------------------------------------------------------------------------------------
 */
 const clearForm = () => {
-  document.getElementById("newDescription").value = "";
-  document.getElementById("newCategory").value = "";
-  document.getElementById("newSubcategory").value = "";
-  document.getElementById("newValue").value = "";
-  document.getElementById("newNbInstallments").value = "";
-  document.getElementById("editedItemId").value = "";
-}
-
-
-/*
-  --------------------------------------------------------------------------------------
-  Function update currency exchange rate
-  --------------------------------------------------------------------------------------
-*/
-const updateExchangeRate = async () => {
-  let exchangerates_api_key = "2e3a54fcfa6f2b4bfd89d5ade4b20227";
-  //let exchangerates_api_key = "stub_key_to_avoid_wasting_requests";
-
-  const url = 'http://api.exchangeratesapi.io/v1/latest?access_key=' + exchangerates_api_key;
-  await fetch(url, {
-    method: 'get'
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      if (data.rates) {
-        const exchange_rate_eur_brl = data.rates.BRL;
-        const exchange_rate_eur_usd = data.rates.USD;
-        exchange_rate = (1 / exchange_rate_eur_brl) * exchange_rate_eur_usd;
-        let exchange_rate_inverse = 1 / exchange_rate;
-        let exchange_rate_ui = document.getElementById('usd-exchange');
-        exchange_rate_ui.textContent = exchange_rate_inverse.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'});
-      } else if (data.error.code === "https_access_restricted") {
-        alert(data.error.message + "\n\nPlease use Firefox browser to avoid HTTPS access error!");
-      }
-    })
-    .catch((error) => {
-      console.error('Error:', error);
-    });
+  document.getElementById("newSurface").value = "";
+  document.getElementById("newTourneyYear").value = "";
+  document.getElementById("newTourneyLevel").value = "";
+  document.getElementById("newBestOfXSets").value = "";
+  document.getElementById("newTourneyRound").value = "";
+  document.getElementById("newFirstName").value = "";
+  document.getElementById("newFirstId").value = "";
+  document.getElementById("newFirstRank").value = "";
+  document.getElementById("newFirstRankPoints").value = "";
+  document.getElementById("newFirstHand").value = "";
+  document.getElementById("newFirstHeight").value = "";
+  document.getElementById("newFirstAge").value = "";
+  document.getElementById("newSecondName").value = "";
+  document.getElementById("newSecondId").value = "";
+  document.getElementById("newSecondRank").value = "";
+  document.getElementById("newSecondRankPoints").value = "";
+  document.getElementById("newSecondHand").value = "";
+  document.getElementById("newSecondHeight").value = "";
+  document.getElementById("newSecondAge").value = "";
 }
 
 
@@ -121,33 +130,105 @@ const updateExchangeRate = async () => {
   --------------------------------------------------------------------------------------
 */
 const newItem = async () => {
-  await updateExchangeRate();
+  let input_surface = document.getElementById("newSurface").value;
+  let input_year = document.getElementById("newTourneyYear").value;
+  let input_tourney_level = document.getElementById("newTourneyLevel").value;
+  let input_best_of_x_sets = document.getElementById("newBestOfXSets").value;
+  let input_tourney_round = document.getElementById("newTourneyRound").value;
+  let input_first_name = document.getElementById("newFirstName").value;
+  let input_first_id = document.getElementById("newFirstId").value;
+  let input_first_rank = document.getElementById("newFirstRank").value;
+  let input_first_rank_points = document.getElementById("newFirstRankPoints").value;
+  let input_first_hand = document.getElementById("newFirstHand").value;
+  let input_first_height = document.getElementById("newFirstHeight").value;
+  let input_first_age = document.getElementById("newFirstAge").value;
+  let input_second_name = document.getElementById("newSecondName").value;
+  let input_second_id = document.getElementById("newSecondId").value;
+  let input_second_rank = document.getElementById("newSecondRank").value;
+  let input_second_rank_points = document.getElementById("newSecondRankPoints").value;
+  let input_second_hand = document.getElementById("newSecondHand").value;
+  let input_second_height = document.getElementById("newSecondHeight").value;
+  let input_second_age = document.getElementById("newSecondAge").value;
 
-  let input_description = document.getElementById("newDescription").value;
-  let input_category = document.getElementById("newCategory").value;
-  let input_subcategory = document.getElementById("newSubcategory").value;
-  let input_value = document.getElementById("newValue").value;
-  let input_nb_installments = document.getElementById("newNbInstallments").value;
+  const input_list = [
+    input_surface,
+    input_year,
+    input_tourney_level,
+    input_best_of_x_sets,
+    input_tourney_round,
+    input_first_name,
+    input_first_id,
+    input_first_rank,
+    input_first_rank_points,
+    input_first_hand,
+    input_first_height,
+    input_first_age,
+    input_second_name,
+    input_second_id,
+    input_second_rank,
+    input_second_rank_points,
+    input_second_hand,
+    input_second_height,
+    input_second_age
+  ]
 
-  if (input_description === '') {
-    alert("Payment 'Description' field is mandatory!");
-  } else if (input_value === '') {
-    alert("Payment 'Value' field is mandatory!");
-  } else if (isNaN(input_value) || (isNaN(input_nb_installments) && input_nb_installments != '')) {
-    alert("'Value' e 'Number of installments' fields accept only numeric values!");
-  } else {
-    if (input_nb_installments === '') {
-      input_nb_installments = 1;
+  let is_input_valid = true;
+  for (let idx = 0; idx < input_list.length(); idx++) {
+    if (input_list[idx] === '') {
+      is_input_valid = false;
     }
+  }
 
-    let new_item = await postItem(input_description, input_category, input_subcategory,
-                                  input_value, input_nb_installments);
-    insertItemInterface(new_item.id, new_item.description, new_item.category,
-                        new_item.subcategory, new_item.value, new_item.nb_installments,
-                        new_item.insertion_date);
+  if (!is_input_valid) {
+    alert("All fields are mandatory! Please check your form!");
+  } else {
+    let new_item = await postItem(
+      input_surface,
+      input_year,
+      input_tourney_level,
+      input_best_of_x_sets,
+      input_tourney_round,
+      input_first_name,
+      input_first_id,
+      input_first_rank,
+      input_first_rank_points,
+      input_first_hand,
+      input_first_height,
+      input_first_age,
+      input_second_name,
+      input_second_id,
+      input_second_rank,
+      input_second_rank_points,
+      input_second_hand,
+      input_second_height,
+      input_second_age);
+
+    insertItemInterface(
+      new_item.id,
+      new_item.surface,
+      new_item.year,
+      new_item.tourney_level,
+      new_item.best_of_x_sets,
+      new_item.tourney_round,
+      new_item.first_name,
+      new_item.first_id,
+      new_item.first_rank,
+      new_item.first_rank_points,
+      new_item.first_hand,
+      new_item.first_height,
+      new_item.first_age,
+      new_item.second_name,
+      new_item.second_id,
+      new_item.second_rank,
+      new_item.second_rank_points,
+      new_item.second_hand,
+      new_item.second_height,
+      new_item.second_age,
+      new_item.winner);
+
     connectDeleteFunctionsToButtons();
     connectEditFunctionsToButtons();
-    alert("New payment added!");
+    alert("New match added!");
   }
 }
 
@@ -159,32 +240,84 @@ const newItem = async () => {
   --------------------------------------------------------------------------------------
 */
 const editItem = async () => {
-  await updateExchangeRate();
-  
-  let input_description = document.getElementById("newDescription").value;
-  let input_category = document.getElementById("newCategory").value;
-  let input_subcategory = document.getElementById("newSubcategory").value;
-  let input_value = document.getElementById("newValue").value;
-  let input_nb_installments = document.getElementById("newNbInstallments").value;
+  let input_surface = document.getElementById("newSurface").value;
+  let input_year = document.getElementById("newTourneyYear").value;
+  let input_tourney_level = document.getElementById("newTourneyLevel").value;
+  let input_best_of_x_sets = document.getElementById("newBestOfXSets").value;
+  let input_tourney_round = document.getElementById("newTourneyRound").value;
+  let input_first_name = document.getElementById("newFirstName").value;
+  let input_first_id = document.getElementById("newFirstId").value;
+  let input_first_rank = document.getElementById("newFirstRank").value;
+  let input_first_rank_points = document.getElementById("newFirstRankPoints").value;
+  let input_first_hand = document.getElementById("newFirstHand").value;
+  let input_first_height = document.getElementById("newFirstHeight").value;
+  let input_first_age = document.getElementById("newFirstAge").value;
+  let input_second_name = document.getElementById("newSecondName").value;
+  let input_second_id = document.getElementById("newSecondId").value;
+  let input_second_rank = document.getElementById("newSecondRank").value;
+  let input_second_rank_points = document.getElementById("newSecondRankPoints").value;
+  let input_second_hand = document.getElementById("newSecondHand").value;
+  let input_second_height = document.getElementById("newSecondHeight").value;
+  let input_second_age = document.getElementById("newSecondAge").value;
   let item_id = document.getElementById("editedItemId").value;
 
-  if (!confirm("Confirm the changes to payment #" + item_id + " (" + input_description +")?")) {
+  if (!confirm("Confirm the changes to match #" + item_id + " (" + input_description +")?")) {
     return;
   }
 
-  if (input_description === '') {
-    alert("Payment 'Description' field is mandatory!");
-  } else if (input_value === '') {
-    alert("Payment 'Value' field is mandatory!");
-  } else if (isNaN(input_value) || (isNaN(input_nb_installments) && input_nb_installments != '')) {
-    alert("'Value' e 'Number of installments' fields accept only numeric values!");
-  } else {
-    if (input_nb_installments === '') {
-      input_nb_installments = 1;
-    }
+  const input_list = [
+    input_surface,
+    input_year,
+    input_tourney_level,
+    input_best_of_x_sets,
+    input_tourney_round,
+    input_first_name,
+    input_first_id,
+    input_first_rank,
+    input_first_rank_points,
+    input_first_hand,
+    input_first_height,
+    input_first_age,
+    input_second_name,
+    input_second_id,
+    input_second_rank,
+    input_second_rank_points,
+    input_second_hand,
+    input_second_height,
+    input_second_age
+  ]
 
-    let new_item = await putItem(input_description, input_category, input_subcategory,
-                                 input_value, input_nb_installments, item_id);
+  let is_input_valid = true;
+  for (let idx = 0; idx < input_list.length(); idx++) {
+    if (input_list[idx] === '') {
+      is_input_valid = false;
+    }
+  }
+
+  if (!is_input_valid) {
+    alert("All fields are mandatory! Please check your form!");
+  } else {
+    let new_item = await putItem(
+      input_surface,
+      input_year,
+      input_tourney_level,
+      input_best_of_x_sets,
+      input_tourney_round,
+      input_first_name,
+      input_first_id,
+      input_first_rank,
+      input_first_rank_points,
+      input_first_hand,
+      input_first_height,
+      input_first_age,
+      input_second_name,
+      input_second_id,
+      input_second_rank,
+      input_second_rank_points,
+      input_second_hand,
+      input_second_height,
+      input_second_age,
+      item_id);
     
     // TODO [MVP3-20]: improve code by updating only the edited payment in the interface
     let table = document.getElementById('table-payments');
@@ -241,13 +374,29 @@ const cancelEdition = async () => {
   Function to add new payment in the server database, via POST request
   --------------------------------------------------------------------------------------
 */
-const postItem = async (description, category, subcategory, value, nb_installments) => {
+const postItem = async (surface, year, tourney_level, best_of_x_sets, tourney_round,
+                        first_name, first_id, first_rank, first_rank_points, first_hand, first_height, first_age,
+                        second_name, second_id, second_rank, second_rank_points, second_hand, second_height, second_age) => {
   const formData = new FormData();
-  formData.append('description', description);
-  formData.append('category', category);
-  formData.append('subcategory', subcategory);
-  formData.append('value', value);
-  formData.append('nb_installments', nb_installments);
+  formData.append('surface', surface);
+  formData.append('year', year);
+  formData.append('tourney_level', tourney_level);
+  formData.append('best_of_x_sets', best_of_x_sets);
+  formData.append('tourney_round', tourney_round);
+  formData.append('first_name', first_name);
+  formData.append('first_id', first_id);
+  formData.append('first_rank', first_rank);
+  formData.append('first_rank_points', first_rank_points);
+  formData.append('first_hand', first_hand);
+  formData.append('first_height', first_height);
+  formData.append('first_age', first_age);
+  formData.append('second_name', second_name);
+  formData.append('second_id', second_id);
+  formData.append('second_rank', second_rank);
+  formData.append('second_rank_points', second_rank_points);
+  formData.append('second_hand', second_hand);
+  formData.append('second_height', second_height);
+  formData.append('second_age', second_age);
   let new_payment = {};
 
   let url = 'http://127.0.0.1:5000/payment';
@@ -272,13 +421,29 @@ const postItem = async (description, category, subcategory, value, nb_installmen
   Function to edit payment in the server database, via PUT request
   --------------------------------------------------------------------------------------
 */
-const putItem = async (description, category, subcategory, value, nb_installments, item_id) => {
+const putItem = async (surface, year, tourney_level, best_of_x_sets, tourney_round,
+                       first_name, first_id, first_rank, first_rank_points, first_hand, first_height, first_age,
+                       second_name, second_id, second_rank, second_rank_points, second_hand, second_height, second_age) => {
   const formData = new FormData();
-  formData.append('description', description);
-  formData.append('category', category);
-  formData.append('subcategory', subcategory);
-  formData.append('value', value);
-  formData.append('nb_installments', nb_installments);
+  formData.append('surface', surface);
+  formData.append('year', year);
+  formData.append('tourney_level', tourney_level);
+  formData.append('best_of_x_sets', best_of_x_sets);
+  formData.append('tourney_round', tourney_round);
+  formData.append('first_name', first_name);
+  formData.append('first_id', first_id);
+  formData.append('first_rank', first_rank);
+  formData.append('first_rank_points', first_rank_points);
+  formData.append('first_hand', first_hand);
+  formData.append('first_height', first_height);
+  formData.append('first_age', first_age);
+  formData.append('second_name', second_name);
+  formData.append('second_id', second_id);
+  formData.append('second_rank', second_rank);
+  formData.append('second_rank_points', second_rank_points);
+  formData.append('second_hand', second_hand);
+  formData.append('second_height', second_height);
+  formData.append('second_age', second_age);
   let edited_payment = {};
 
   let url = 'http://127.0.0.1:5000/paymentedition?id=' + item_id;
@@ -303,13 +468,16 @@ const putItem = async (description, category, subcategory, value, nb_installment
   Function to insert new payment in the interface
   --------------------------------------------------------------------------------------
 */
-const insertItemInterface = (id, description, category, subcategory, 
-                             value, nb_installments, insertion_date) => {
-  const exchange_value = value * exchange_rate;
+const insertItemInterface = (id, surface, year, tourney_level, best_of_x_sets, tourney_round,
+                             first_name, first_id, first_rank, first_rank_points, first_hand, first_height, first_age,
+                             second_name, second_id, second_rank, second_rank_points, second_hand, second_height, second_age,
+                             winner) => {
   let table = document.getElementById('table-payments');
   let row = table.insertRow();
-  const item = [id, description, category, subcategory,
-                value, exchange_value, nb_installments, insertion_date];
+  const item = [id, surface, year, tourney_level, best_of_x_sets, tourney_round,
+                first_name, first_id, first_rank, first_rank_points, first_hand, first_height, first_age,
+                second_name, second_id, second_rank, second_rank_points, second_hand, second_height, second_age,
+                winner];
   const row_data_length = item.length;
 
   // Inserts 'edition' button at the beginning of each line of the UI payments table
@@ -322,19 +490,7 @@ const insertItemInterface = (id, description, category, subcategory,
     // There are 10 cells/columns per row, but only 8 data values from the itens (1st cell is edition button and last cell is delete button)
     const item_idx = cell_idx - 1;
     const attribute_value = item[item_idx];
-
-    if (cell_idx === attributes.Value) {
-      cel.textContent = attribute_value.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'});
-    } else if (cell_idx === attributes.Exchange_Value) {
-      cel.textContent = attribute_value.toLocaleString('en-US', {style: 'currency', currency: 'USD'}); // FIXME: get correct symbols for the chosen currency, euros, dolars, etc
-    } else if (cell_idx === attributes.InsertionDate) {
-      const dateObj = new Date(attribute_value);
-      const isoDateStr = dateObj.toISOString();
-      const yyyyMmDd = isoDateStr.slice(0, 10).replace(/-/g, '/'); // extracting yyyy/mm/dd
-      cel.textContent = yyyyMmDd;
-    } else {
-      cel.textContent = attribute_value;
-    }
+    cel.textContent = attribute_value;
   }
 
   // Inserts 'delete' button at the end of each line of the UI payments table
@@ -443,12 +599,26 @@ const connectEditFunctionsToButtons = () => {
       let item = await getItem(item_id);
       
       // Fill up edition form with selected item data
-      document.getElementById("newDescription").value = item.description;
-      document.getElementById("newCategory").value = item.category;
-      document.getElementById("newSubcategory").value = item.subcategory;
-      document.getElementById("newValue").value = item.value;
-      document.getElementById("newNbInstallments").value = item.nb_installments;
       document.getElementById("editedItemId").value = item.id;
+      document.getElementById("newSurface").value = item.surface;
+      document.getElementById("newTourneyYear").value = item.year;
+      document.getElementById("newTourneyLevel").value = item.tourney_level;
+      document.getElementById("newBestOfXSets").value = item.best_of_x_sets;
+      document.getElementById("newTourneyRound").value = item.tourney_round;
+      document.getElementById("newFirstName").value = item.first_name;
+      document.getElementById("newFirstId").value = item.first_id;
+      document.getElementById("newFirstRank").value = item.first_rank;
+      document.getElementById("newFirstRankPoints").value = item.first_rank_points;
+      document.getElementById("newFirstHand").value = item.first_hand;
+      document.getElementById("newFirstHeight").value = item.first_height;
+      document.getElementById("newFirstAge").value = item.first_age;
+      document.getElementById("newSecondName").value = item.second_name;
+      document.getElementById("newSecondId").value = item.second_id;
+      document.getElementById("newSecondRank").value = item.second_rank;
+      document.getElementById("newSecondRankPoints").value = item.second_rank_points;
+      document.getElementById("newSecondHand").value = item.second_hand;
+      document.getElementById("newSecondHeight").value = item.second_height;
+      document.getElementById("newSecondAge").value = item.second_age;
     }
   }
 }

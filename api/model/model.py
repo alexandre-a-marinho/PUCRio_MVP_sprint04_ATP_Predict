@@ -25,21 +25,22 @@ class Model:
             form.tourney_level, 
             form.best_of_x_sets, 
             form.tourney_round, 
-            form.first_name, 
+            #form.first_name, 
             form.first_hand, 
             form.first_id,
             form.first_rank,
             form.first_rank_points,
             form.first_age,
             form.first_height,
-            form.second_name, 
+            #form.second_name, 
             form.second_hand, 
             form.second_id,
             form.second_rank,
             form.second_rank_points,
             form.second_age,
-            form.second_height
-        ])
+            form.second_height])
+
+        # FIXME:encode input before prediction
 
         # Faremos o reshape para que o modelo entenda que estamos passando
         winner = model.predict(X_input.reshape(1, -1))

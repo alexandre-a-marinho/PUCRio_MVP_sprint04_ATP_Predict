@@ -6,6 +6,7 @@ import os
 # Imports elements defined in the model
 from model.base import Base
 from model.payment import Payment
+from model.model import Model
 
 # Specifies the database directory and verifies if it exists
 db_path = "database/"
