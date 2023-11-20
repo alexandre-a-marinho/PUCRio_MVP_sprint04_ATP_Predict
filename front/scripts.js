@@ -173,7 +173,7 @@ const newItem = async () => {
   ]
 
   let is_input_valid = true;
-  for (let idx = 0; idx < input_list.length(); idx++) {
+  for (let idx = 0; idx < input_list.length; idx++) {
     if (input_list[idx] === '') {
       is_input_valid = false;
     }
@@ -261,7 +261,7 @@ const editItem = async () => {
   let input_second_age = document.getElementById("newSecondAge").value;
   let item_id = document.getElementById("editedItemId").value;
 
-  if (!confirm("Confirm the changes to match #" + item_id + " (" + input_description +")?")) {
+  if (!confirm("Confirm the changes to match #" + item_id + " (" + input_first_name + " vs " + input_second_name +")?")) {
     return;
   }
 
@@ -288,7 +288,7 @@ const editItem = async () => {
   ]
 
   let is_input_valid = true;
-  for (let idx = 0; idx < input_list.length(); idx++) {
+  for (let idx = 0; idx < input_list.length; idx++) {
     if (input_list[idx] === '') {
       is_input_valid = false;
     }
@@ -423,7 +423,8 @@ const postItem = async (surface, year, tourney_level, best_of_x_sets, tourney_ro
 */
 const putItem = async (surface, year, tourney_level, best_of_x_sets, tourney_round,
                        first_name, first_id, first_rank, first_rank_points, first_hand, first_height, first_age,
-                       second_name, second_id, second_rank, second_rank_points, second_hand, second_height, second_age) => {
+                       second_name, second_id, second_rank, second_rank_points, second_hand, second_height, second_age,
+                       item_id) => {
   const formData = new FormData();
   formData.append('surface', surface);
   formData.append('year', year);

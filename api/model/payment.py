@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Integer, Date, Float
+from sqlalchemy import Column, String, Integer, Date, Float, CheckConstraint
 from datetime import date
 from typing import Union
 
@@ -29,6 +29,22 @@ class Payment(Base):
     second_height = Column(Float, default = 180.0)
     second_age = Column(Float, default = 26.0)
     winner = Column(String(40))
+    
+    # # Define constraints to limit some fields to specific values | FIXME: not working yet...
+    # __surfaces = ["Carpet", "Clay", "Grass", "Hard"]
+    # __hands = {"L", "R"}
+    # # A: ATP level (250, 500), D: Davis Cup, F: ATP Finals, G: Grand Slams, M: Masters 1000
+    # __tourney_levels = ["A", "D", "F", "G", "M"]
+    # # BR: ?, ER: ?: F: final, QF: quarter-fnal, RR: round robin, SF: semi-final
+    # __tourney_rounds = ["BR", "ER", "F", "QF", "R128", "R16", "R32", "R64", "RR", "SF"]
+    
+    # __table_args__ = (
+    #     CheckConstraint(surface.in_(__surfaces),name='check_valid_surface'),
+    #     CheckConstraint(first_hand.in_(__hands),name='check_valid_first_hand'),
+    #     CheckConstraint(second_hand.in_(__hands),name='check_valid_second_hand'),
+    #     CheckConstraint(tourney_level.in_(__tourney_levels),name='check_valid_tourney_level'),
+    #     CheckConstraint(tourney_round.in_(__tourney_rounds),name='check_valid_tourney_round'),
+    # )
 
     def __init__(self, surface:str, year:int, tourney_level:str, best_of_x_sets:int, tourney_round:str,
                  first_name:str, first_hand:str, first_id:int, first_rank:float, first_rank_points:float, first_age:float, first_height:float,
