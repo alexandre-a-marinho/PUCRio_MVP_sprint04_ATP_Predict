@@ -64,29 +64,6 @@ const getList = async () => {
     .catch((error) => {
       console.error('Error:', error);
     });
-
-  updatePaymentsSum();
-}
-
-
-/*
-  --------------------------------------------------------------------------------------
-  Function to update the sum of payment values, via GET request
-  --------------------------------------------------------------------------------------
-*/
-const updatePaymentsSum = async () => {
-  let url = 'http://127.0.0.1:5000/payments_sum';
-  fetch(url, {
-    method: 'get'
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      let payments_sum = document.getElementById('payments-sum');
-      payments_sum.textContent = data.payments_sum.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'});
-    })
-    .catch((error) => {
-      console.error('Error:', error);
-    });
 }
 
 
@@ -170,7 +147,6 @@ const newItem = async () => {
                         new_item.insertion_date);
     connectDeleteFunctionsToButtons();
     connectEditFunctionsToButtons();
-    updatePaymentsSum();
     alert("New payment added!");
   }
 }
@@ -430,7 +406,6 @@ const connectDeleteFunctionsToButtons = () => {
         }
 
         alert("Payment deleted!");
-        updatePaymentsSum();
       }
     }
   }

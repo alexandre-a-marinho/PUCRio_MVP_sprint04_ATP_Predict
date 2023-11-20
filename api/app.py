@@ -66,9 +66,10 @@ def add_payment(form: PaymentSchema):
         second_rank_points = form.second_rank_points,
         second_age = form.second_age,
         second_height = form.second_height,
-        winner = Model.predictor(model, form))
+        winner_code = Model.predictor(model, form)
+    )
     
-    logger.debug(f"Added Payment is described by: '{payment.description}'")
+    logger.debug(f"Added Match between '{payment.first_name}' and '{payment.second_name}'.")
     try:
         # Creates database connection
         session = Session()
@@ -76,20 +77,18 @@ def add_payment(form: PaymentSchema):
         # Adds new item to the database table and commits it
         session.add(payment)
         session.commit()
-        logger.debug(f"Added Payment is described by: '{payment.description}'")
-        value_to_add = form.value
-        updates_payments_sum_cache(value_to_add)
+        logger.debug(f"Added Match between '{payment.first_name}' and '{payment.second_name}'.")
         return show_payment(payment), 200
 
     except IntegrityError as e:
-        error_msg = "Integrity error on new Payment addition :/"
-        logger.warning(f"Error while adding Payment #{payment.id}({payment.description}): {error_msg}")
+        error_msg = "Integrity error on new Match addition :/"
+        logger.warning(f"Error while adding Match #{payment.id} between '{payment.first_name}' and '{payment.second_name}': {error_msg}")
         return {"message": error_msg}, 409
 
     except Exception as e:
         # in case of a non-expected error
-        error_msg = "It was not possible to save the new Payment :/"
-        logger.warning(f"Error while adding Payment #{payment.id}({payment.description}): {error_msg}")
+        error_msg = "It was not possible to save the new Match :/"
+        logger.warning(f"Error while adding Match #{payment.id} between '{payment.first_name}' and '{payment.second_name}': {error_msg}")
         return {"message": error_msg}, 400
 
 
@@ -100,40 +99,52 @@ def edit_payment(query: PaymentSearchSchema, form: PaymentSchema,):
 
     Returns the representation of the edited Payment (as per PaymentViewSchema).
     """
-    edited_payment_id = query.id
-    logger.debug(f"Edited Payment is described by: '#{edited_payment_id}({form.description})'")
+    edited_match_id = query.id
+    logger.debug(f"Edited Match between '{payment.first_name}' and '{payment.second_name}'.")
     
     try:
         # Creates database connection
-        logger.debug(f"Editing Payment #{edited_payment_id}")
+        logger.debug(f"Editing Match #{edited_match_id}")
         session = Session()
         
         # Selects item to edit it in the database table and then commits it
-        database_payment_to_edit = session.query(Payment).filter(Payment.id == edited_payment_id).first()
-        old_value = database_payment_to_edit.value;
-        database_payment_to_edit.description = form.description
-        database_payment_to_edit.category = form.category
-        database_payment_to_edit.subcategory = form.subcategory
-        database_payment_to_edit.value = form.value
-        database_payment_to_edit.nb_installments = form.nb_installments
-        database_payment_to_edit.insertion_date = date.today()
-        session.commit()
+        database_match_to_edit = session.query(Payment).filter(Payment.id == edited_match_id).first()
+        database_match_to_edit.surface = form.surface,
+        database_match_to_edit.year = form.surface,
+        database_match_to_edit.tourney_level = form.tourney_level,
+        database_match_to_edit.best_of_x_sets = form.best_of_x_sets,
+        database_match_to_edit.tourney_round = form.tourney_round,
+        database_match_to_edit.first_name = form.first_name,
+        database_match_to_edit.first_hand = form.first_hand,
+        database_match_to_edit.first_id = form.first_id,
+        database_match_to_edit.first_rank = form.first_rank,
+        database_match_to_edit.first_rank_points = form.first_rank_points,
+        database_match_to_edit.first_age = form.first_age,
+        database_match_to_edit.first_height = form.first_height,
+        database_match_to_edit.second_name = form.second_name,
+        database_match_to_edit.second_hand = form.second_hand,
+        database_match_to_edit.second_id = form.second_id,
+        database_match_to_edit.second_rank = form.second_rank,
+        database_match_to_edit.second_rank_points = form.second_rank_points,
+        database_match_to_edit.second_age = form.second_age,
+        database_match_to_edit.second_height = form.second_height,
 
-        # Updates Sum of values
-        value_to_add = (form.value - old_value)
-        updates_payments_sum_cache(value_to_add)
+        winner_code = Model.predictor(model, form)  #FIXME: encode necessary form fields before sending to predictor
+        database_match_to_edit.winner = Payment.getUncodedWinner(winner_code, form)
+
+        session.commit()
         
-        return show_payment(database_payment_to_edit), 200
+        return show_payment(database_match_to_edit), 200
 
     except IntegrityError as e:
-        error_msg = "Integrity error on new Payment addition :/"
-        logger.warning(f"Error while editing Payment #{database_payment_to_edit.id}({database_payment_to_edit.description}): {error_msg}")
+        error_msg = "Integrity error on new Match addition :/"
+        logger.warning(f"Error while editing Payment #{database_match_to_edit.id}({database_match_to_edit.description}): {error_msg}")
         return {"message": error_msg}, 409
 
     except Exception as e:
         # in case of a non-expected error
         error_msg = "It was not possible to save the new Payment :/"
-        logger.warning(f"Error while editing Payment #{database_payment_to_edit.id}({database_payment_to_edit.description}): {error_msg}")
+        logger.warning(f"Error while editing Payment #{database_match_to_edit.id}({database_match_to_edit.description}): {error_msg}")
         return {"message": error_msg}, 400
 
 

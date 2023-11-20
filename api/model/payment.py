@@ -33,7 +33,7 @@ class Payment(Base):
     def __init__(self, surface:str, year:int, tourney_level:str, best_of_x_sets:int, tourney_round:str,
                  first_name:str, first_hand:str, first_id:int, first_rank:float, first_rank_points:float, first_age:float, first_height:float,
                  second_name:str, second_hand:str, second_id:int, second_rank:float, second_rank_points:float, second_age:float, second_height:float,
-                 winner:str):
+                 winner_code:int):
         """Creates a Payment.
 
         Arguments:
@@ -63,5 +63,10 @@ class Payment(Base):
         self.second_rank_points = second_rank_points
         self.second_age = second_age
         self.second_height = second_height
-        self.winner = winner
-
+        
+        if (winner_code == 0):
+            self.winner = first_name
+        elif (winner_code == 1):
+            self.winner = second_name
+        else:
+            self.winner = "invalid winner code"
