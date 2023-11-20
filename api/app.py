@@ -41,14 +41,32 @@ def add_payment(form: PaymentSchema):
 
     Returns the representation of the added Payment (as per PaymentViewSchema).
     """
+    
+    # Loading the prediction model
+    ml_path = 'ml_model/atp_predict.pkl'
+    model = Model.load_model(ml_path)
+    
     payment = Payment(
-        description = form.description,
-        category = form.category,
-        subcategory = form.subcategory,
-        value = form.value,
-        nb_installments = form.nb_installments,
-        insertion_date = date.today())
-    # TODO: [1] Feature: allow user to add custom date
+        surface = form.surface,
+        year = form.surface,
+        tourney_level = form.tourney_level,
+        best_of_x_sets = form.best_of_x_sets,
+        tourney_round = form.tourney_round,
+        first_name = form.first_name,
+        first_hand = form.first_hand,
+        first_id = form.first_id,
+        first_rank = form.first_rank,
+        first_rank_points = form.first_rank_points,
+        first_age = form.first_age,
+        first_height = form.first_height,
+        second_name = form.second_name,
+        second_hand = form.second_hand,
+        second_id = form.second_id,
+        second_rank = form.second_rank,
+        second_rank_points = form.second_rank_points,
+        second_age = form.second_age,
+        second_height = form.second_height,
+        winner = Model.predictor(model, form))
     
     logger.debug(f"Added Payment is described by: '{payment.description}'")
     try:

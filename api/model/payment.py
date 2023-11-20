@@ -9,7 +9,7 @@ class Payment(Base):
     __tablename__ = 'payments'
 
     id = Column("pk_payment", Integer, primary_key = True)
-    surface = Column(String(20))
+    surface = Column(String(20), default = "Hard")
     year = Column(Integer, default = 2023)
     tourney_level = Column(String(1), default = "M")
     best_of_x_sets = Column(Integer, default = 3)
