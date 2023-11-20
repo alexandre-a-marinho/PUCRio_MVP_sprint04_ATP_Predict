@@ -138,13 +138,13 @@ def edit_payment(query: PaymentSearchSchema, form: PaymentSchema,):
 
     except IntegrityError as e:
         error_msg = "Integrity error on new Match addition :/"
-        logger.warning(f"Error while editing Payment #{database_match_to_edit.id}({database_match_to_edit.description}): {error_msg}")
+        logger.warning(f"Error while editing Match #{payment.id} between '{payment.first_name}' and '{payment.second_name}': {error_msg}")
         return {"message": error_msg}, 409
 
     except Exception as e:
         # in case of a non-expected error
-        error_msg = "It was not possible to save the new Payment :/"
-        logger.warning(f"Error while editing Payment #{database_match_to_edit.id}({database_match_to_edit.description}): {error_msg}")
+        error_msg = "It was not possible to save the new Match :/"
+        logger.warning(f"Error while editing Match #{payment.id} between '{payment.first_name}' and '{payment.second_name}': {error_msg}")
         return {"message": error_msg}, 400
 
 
@@ -164,7 +164,6 @@ def get_payments():
     if payments:
         logger.debug(f"%d Payments found" % len(payments))
         print(payments)
-        updates_payments_sum_cache(0)
         # retuns the representation of the list of all payments found
         return show_payments(payments), 200
     else:
@@ -193,7 +192,7 @@ def get_payment(query: PaymentSearchSchema):
         return show_payment(payment), 200
     else:
         error_msg = "Payment not found in database :/"
-        logger.warning(f"Erro while searching for Payment #{payment_id}: {error_msg}")
+        logger.warning(f"Error while searching for Match #{payment.id} between '{payment.first_name}' and '{payment.second_name}': {error_msg}")
         return {"message": error_msg}, 404
 
 
@@ -212,56 +211,21 @@ def del_payment(query: PaymentSearchSchema):
     
     # Searching and deleting target Payment
     payment_to_delete: Payment = session.query(Payment).filter(Payment.id == payment_id).first()
-    value_to_discount = payment_to_delete.value
-    payment_description = payment_to_delete.description
+    payment_first_name = payment_to_delete.first_name
+    payment_second_name = payment_to_delete.second_name
     payment_deletion_success = session.query(Payment).filter(Payment.id == payment_id).delete()
     session.commit()
 
     if payment_deletion_success:
-        logger.debug(f"Payment deleted #{payment_id}:'{payment_description}'")
-        updates_payments_sum_cache(-value_to_discount)
+        logger.debug(f"Match deleted #{payment_id}, between '{payment_first_name}' and '{payment_second_name}'")
         # retuns the representation of the confirmation message
-        return {"message": "Payment deleted", "id": payment_id, "description": payment_description}
+        return {"message": "Match deleted", "id": payment_id, "player one": payment_first_name, "player two": payment_second_name}
     else:
-        error_msg = "Payment not found in database :/"
-        logger.warning(f"Error while deleting Payment #{payment_id}:'{payment_description}': {error_msg}")
-        return {"message": error_msg}, 404
-
-
-@app.get('/payments_sum', tags=[analysis_tag],
-         responses={"200": PaymentsSumSchema, "404": ErrorSchema})
-def payments_sum():
-    """Returns the sum of value field from all database Payments."""
-    payments_sum: float = cache.get('payments_sum')
-    validates_payments_sum_cache(payments_sum)
-        
-    if payments_sum:
-        logger.debug(f"Got sum of values from all Payments in the database")
-        return {"payments_sum": payments_sum}, 200
-    else:
-        error_msg = "It was not possible to obtain the sum of Payment values:/"
-        logger.warning(error_msg)
+        error_msg = "Match not found in database :/"
+        logger.warning(f"Error while deleting Match #{payment_id} between '{payment_first_name}' and '{payment_second_name}': {error_msg}")
         return {"message": error_msg}, 404
 
 
 #  --------------------------------------------------------------------------------------
 #  Auxiliary functions
 #  --------------------------------------------------------------------------------------
-def validates_payments_sum_cache(payments_sum):
-    """ Checks if there is a value of the sum of Payments in its respective cache.
-    If it does not exist, it calculates the sum and fills the cache.
-    
-    Returns validate sum of Payments
-    """
-    if payments_sum is None:
-        session = Session()
-        payments_sum = session.query(func.sum(Payment.value)).scalar()
-        cache.set('payments_sum', payments_sum)
-    return payments_sum
-
-
-def updates_payments_sum_cache(value):
-    """ Updates cache of the sum of Payments according to the provided 'value'."""
-    payments_sum: float = cache.get('payments_sum')
-    payments_sum = validates_payments_sum_cache(payments_sum)
-    cache.set('payments_sum', payments_sum + value)

@@ -70,3 +70,12 @@ class Payment(Base):
             self.winner = second_name
         else:
             self.winner = "invalid winner code"
+            
+    @staticmethod
+    def getUncodedWinner(winner_code, form):
+        if (winner_code == 0):
+            return  form.first_name
+        elif (winner_code == 1):
+            return  form.second_name
+        else:
+            return "invalid winner code"
