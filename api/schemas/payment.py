@@ -83,7 +83,7 @@ def show_payments(payments: List[Payment]):
         result.append({
             "id": payment.id,
             "surface": payment.surface,
-            "year": payment.surface,
+            "year": payment.year,
             "tourney_level":payment.tourney_level,
             "best_of_x_sets": payment.best_of_x_sets,
             "tourney_round": payment.tourney_round,
@@ -111,7 +111,7 @@ def show_payment(payment: Payment):
     return {
         "id": payment.id,
         "surface": payment.surface,
-        "year": payment.surface,
+        "year": payment.year,
         "tourney_level":payment.tourney_level,
         "best_of_x_sets": payment.best_of_x_sets,
         "tourney_round": payment.tourney_round,

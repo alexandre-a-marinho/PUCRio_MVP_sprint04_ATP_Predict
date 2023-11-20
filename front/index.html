@@ -36,7 +36,12 @@
                 <hr class="rounded">
                 <div class="row mb-2">
                     <label for="newSurface"><b>Surface:</b></label>
-                    <input type="text" id="newSurface" class="form-control rounded" placeholder="">
+                    <select id="newSurface" class="form-control rounded">
+                        <option value="Carpet">Carpet</option>
+                        <option value="Clay">Clay</option>
+                        <option value="Grass">Grass</option>
+                        <option value="Hard">Hard</option>
+                    </select>
                 </div>
                 <div class="row mb-2">
                     <label for="newTourneyYear"><b>Year:</b></label>
@@ -44,15 +49,35 @@
                 </div>
                 <div class="row mb-2">
                     <label for="newTourneyLevel"><b>Tournament Level:</b></label>
-                    <input type="text" id="newTourneyLevel" class="form-control rounded" placeholder="">
+                    <select id="newTourneyLevel" class="form-control rounded">
+                        <option value="A">ATP 250/500</option>
+                        <option value="D">Davis Cup</option>
+                        <option value="M">Masters 1000</option>
+                        <option value="F">ATP Finals</option>
+                        <option value="G">Grand Slam</option>
+                    </select>
                 </div>
                 <div class="row mb-2">
                     <label for="newBestOfXSets"><b>Best of 3/5 Sets:</b></label>
-                    <input type="number" id="newBestOfXSets" class="form-control rounded" placeholder="">
+                    <select id="newBestOfXSets" class="form-control rounded">
+                        <option value="3">Best of 3</option>
+                        <option value="5">Best of 5</option>
+                    </select>
                 </div>
                 <div class="row mb-2">
                     <label for="newTourneyRound"><b>Round:</b></label>
-                    <input type="text" id="newTourneyRound" class="form-control rounded" placeholder="">
+                    <select id="newTourneyRound" class="form-control rounded">
+                        <option value="BR">BR</option>
+                        <option value="ER">ER</option>
+                        <option value="RR">Round Robin</option>
+                        <option value="R128">Round of 128</option>
+                        <option value="R64">Round of 64</option>
+                        <option value="R32">Round of 32</option>
+                        <option value="R16">Round of 16</option>
+                        <option value="QF">Quarter Final</option>
+                        <option value="SF">Semi Final</option>
+                        <option value="F">Final</option>
+                    </select>
                 </div>
                 <div class="row mb-2">
                     <label for="editedItemId" id="editedItemIdLabel"><b>Id:</b></label>
@@ -98,7 +123,10 @@
                 </div>
                 <div class="row mb-2">
                     <label for="newFirstHand"><b>Dominant Hand:</b></label>
-                    <input type="text" id="newFirstHand" class="form-control rounded" placeholder="">
+                    <select id="newFirstHand" class="form-control rounded">
+                        <option value="L">L</option>
+                        <option value="R">R</option>
+                    </select>
                 </div>
                 <div class="row mb-2">
                     <label for="newFirstHeight"><b>Height (cm):</b></label>
@@ -132,7 +160,10 @@
                 </div>
                 <div class="row mb-2">
                     <label for="newSecondHand"><b>Dominant Hand:</b></label>
-                    <input type="text" id="newSecondHand" class="form-control rounded" placeholder="">
+                    <select id="newSecondHand" class="form-control rounded">
+                        <option value="L">L</option>
+                        <option value="R">R</option>
+                    </select>
                 </div>
                 <div class="row mb-2">
                     <label for="newSecondHeight"><b>Height (cm):</b></label>

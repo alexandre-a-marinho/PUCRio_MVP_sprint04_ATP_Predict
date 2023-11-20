@@ -46,6 +46,7 @@ const getItem = async function (item_id) {
       item.year = data.year;
       item.tourney_level = data.tourney_level;
       item.best_of_x_sets = data.best_of_x_sets;
+      item.tourney_round = data.tourney_round;
       item.first_name = data.first_name;
       item.first_id = data.first_id;
       item.first_rank = data.first_rank;
