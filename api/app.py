@@ -6,24 +6,25 @@ from datetime import date
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy import func
 
-from model import Session, Payment
+from model import Session, Payment, Model
 from logger import logger
 from schemas import *
 from flask_cors import CORS
 
+
+# Creating OpenAPI object
 info = Info(title="Payments Control", version="1.0.0")
 app = OpenAPI(__name__, info=info)
 CORS(app)
-
-# Sets cache
-app.config['CACHE_TYPE'] = 'simple'
-cache = Cache(app)
 
 # Defining tags
 home_tag = Tag(name="Documentation", description="Documentation selection: Swagger, Redoc or RapiDoc")
 payment_tag = Tag(name="Payment", description="Addition, visualization, edition and deletion of payments from the database")
 analysis_tag = Tag(name="Analysis", description="Statistics and analysis regarding the payments in the database")
 
+# Sets cache
+app.config['CACHE_TYPE'] = 'simple'
+cache = Cache(app)
 
 #  --------------------------------------------------------------------------------------
 #  Routes
