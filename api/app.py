@@ -24,6 +24,7 @@ analysis_tag = Tag(name="Analysis", description="Statistics and analysis regardi
 
 # Sets cache
 app.config['CACHE_TYPE'] = 'simple'
+app.config["DEBUG"] = True
 cache = Cache(app)
 
 #  --------------------------------------------------------------------------------------
@@ -31,7 +32,7 @@ cache = Cache(app)
 #  --------------------------------------------------------------------------------------
 @app.get('/', tags=[home_tag])
 def home():
-    """Redirects to /openapi, allowing us to chose the type od documentation."""
+    """Redirects to /openapi, allowing us to chose the type of documentation."""
     return redirect('/openapi')
 
 
@@ -44,8 +45,9 @@ def add_payment(form: PaymentSchema):
     """
     
     # Loading the prediction model
-    ml_path = 'ml_model/atp_predict.pkl'
-    #model = Model.loadModel(ml_path)
+    ml_path = 'ml_model/atp_model.pkl'
+    model = Model.loadModel(ml_path)
+    form_encoded = Model.encodeMatchFormData(form)
     
     payment = Payment(
         surface = form.surface,
@@ -67,7 +69,7 @@ def add_payment(form: PaymentSchema):
         second_rank_points = form.second_rank_points,
         second_age = form.second_age,
         second_height = form.second_height,
-        winner_code = 1 #Model.predictor(model, form)
+        winner_code = Model.predictor(model, form_encoded)
     )
     
     logger.debug(f"Added Match between '{payment.first_name}' and '{payment.second_name}'.")
@@ -104,7 +106,7 @@ def edit_payment(query: PaymentSearchSchema, form: PaymentSchema,):
     logger.debug(f"Editing Match #{edited_match_id} between '{form.first_name}' and '{form.second_name}'.")
     
     # Loading the prediction model
-    ml_path = 'ml_model/atp_predict.pkl'
+    ml_path = 'ml_model/atp_model.pkl'
     #model = Model.loadModel(ml_path)
     
     try:

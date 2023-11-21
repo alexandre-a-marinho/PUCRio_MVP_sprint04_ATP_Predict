@@ -4,7 +4,6 @@ from typing import Union
 
 from model import Base
 
-
 class Payment(Base):
     __tablename__ = 'payments'
 
