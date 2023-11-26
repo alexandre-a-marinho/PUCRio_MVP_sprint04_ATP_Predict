@@ -1,6 +1,7 @@
 import numpy as np
 import pickle
 import joblib
+import pandas as pd
 
 from sklearn.preprocessing import LabelEncoder
 
@@ -23,25 +24,44 @@ class Model:
         """
         X_input = np.array([  #FIXME: verify order of data in model, must be the same here
             form["surface"], 
-            form["year"], 
             form["tourney_level"], 
+            form["second_id"],
+            form["second_hand"], 
+            form["second_height"],
+            form["second_age"],
+            form["first_id"],
+            form["first_hand"], 
+            form["first_height"],
+            form["first_age"],
             form["best_of_x_sets"], 
             form["tourney_round"], 
-            form["first_hand"], 
-            form["first_id"],
-            form["first_rank"],
-            form["first_rank_points"],
-            form["first_age"],
-            form["first_height"],
-            form["second_hand"], 
-            form["second_id"],
             form["second_rank"],
             form["second_rank_points"],
-            form["second_age"],
-            form["second_height"]])
+            form["first_rank"],
+            form["first_rank_points"],
+            form["year"]])
 
-        # Faremos o reshape para que o modelo entenda que estamos passando
-        winner = model.predict(X_input.reshape(1, -1))
+        feature_names = ["surface",
+                         "tourney_level",
+                         "second_id",
+                         "second_hand",
+                         "second_ht",
+                         "second_age",
+                         "first_id",
+                         "first_hand",
+                         "first_ht",
+                         "first_age",
+                         "best_of",
+                         "round",
+                         "second_rank",
+                         "second_rank_points",
+                         "first_rank",
+                         "first_rank_points",
+                         "tourney_year"]
+        
+        # Transform into dataframe to connect to feature_names
+        X_input_df = pd.DataFrame([X_input], columns=feature_names)
+        winner = model.predict(X_input_df)
         return int(winner[0])
     
     @staticmethod
@@ -86,7 +106,5 @@ class Model:
         tourney_round_encoder = LabelEncoder()
         tourney_round_encoder.fit(tourney_rounds)
         form_encoded["tourney_round"] = tourney_round_encoder.transform([form.tourney_round])[0]
-        
-        print(form_encoded)
         
         return form_encoded
