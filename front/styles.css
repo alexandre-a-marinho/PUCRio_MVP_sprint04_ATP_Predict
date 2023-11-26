@@ -173,7 +173,11 @@ table {
     background: #d17f0b51; /*gold 50% opacity*/
 }
 
-#table-payments td:nth-child(22):hover {
+#table-payments td:nth-child(22) {
+    background: rgba(26, 150, 10, 0.477);
+}
+
+#table-payments td:nth-child(23):hover {
     background: rgb(0, 0, 0);
 }
 
