@@ -107,7 +107,8 @@ def edit_payment(query: PaymentSearchSchema, form: PaymentSchema,):
     
     # Loading the prediction model
     ml_path = 'ml_model/atp_model.pkl'
-    #model = Model.loadModel(ml_path)
+    model = Model.loadModel(ml_path)
+    form_encoded = Model.encodeMatchFormData(form)
     
     try:
         # Creates database connection
@@ -135,7 +136,7 @@ def edit_payment(query: PaymentSearchSchema, form: PaymentSchema,):
         to_edit.second_age = form.second_age
         to_edit.second_height = form.second_height
 
-        winner_code = 0 #Model.predictor(model, form)  #FIXME: encode necessary form fields before sending to predictor
+        winner_code = Model.predictor(model, form_encoded)
         to_edit.winner = Payment.getUncodedWinner(winner_code, form)
 
         session.commit()
