@@ -7,22 +7,22 @@ from sklearn.preprocessing import LabelEncoder
 
 class Model:
     
-    def loadModel(path):
+    def loadExternalPythonObject(path):
         """Dependendo se o final for .pkl ou .joblib, carregamos de uma forma ou de outra
         """
         
         if path.endswith('.pkl'):
-            model = pickle.load(open(path, 'rb'))
+            pyobj = pickle.load(open(path, 'rb'))
         elif path.endswith('.joblib'):
-            model = joblib.load(path)
+            pyobj = joblib.load(path)
         else:
             raise Exception('Formato de arquivo não suportado')
-        return model
+        return pyobj
     
     def predictor(model, form):
         """Realiza a predição de um paciente com base no modelo treinado
         """
-        X_input = np.array([  #FIXME: verify order of data in model, must be the same here
+        x_input = np.array([  #FIXME: verify order of data in model, must be the same here
             form["surface"], 
             form["tourney_level"], 
             form["second_id"],
@@ -60,8 +60,15 @@ class Model:
                          "tourney_year"]
         
         # Transform into dataframe to connect to feature_names
-        X_input_df = pd.DataFrame([X_input], columns=feature_names)
-        winner = model.predict(X_input_df)
+        x_input_df = pd.DataFrame([x_input], columns=feature_names)
+        
+        # Scale input according to training dataset
+        scaler_standard_path = 'ml_model/atp_scaler_standard.pkl'
+        scaler_standard = Model.loadExternalPythonObject(scaler_standard_path)
+        x_input_df = scaler_standard.transform(x_input_df)
+        
+        winner = model.predict(x_input_df)
+
         return int(winner[0])
     
     @staticmethod

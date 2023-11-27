@@ -45,8 +45,8 @@ def add_payment(form: PaymentSchema):
     """
     
     # Loading the prediction model
-    ml_path = 'ml_model/atp_model.pkl'
-    model = Model.loadModel(ml_path)
+    model_obj_path = 'ml_model/atp_model.pkl'
+    model = Model.loadExternalPythonObject(model_obj_path)
     form_encoded = Model.encodeMatchFormData(form)
     
     payment = Payment(
@@ -106,8 +106,8 @@ def edit_payment(query: PaymentSearchSchema, form: PaymentSchema,):
     logger.debug(f"Editing Match #{edited_match_id} between '{form.first_name}' and '{form.second_name}'.")
     
     # Loading the prediction model
-    ml_path = 'ml_model/atp_model.pkl'
-    model = Model.loadModel(ml_path)
+    model_obj_path = 'ml_model/atp_model.pkl'
+    model = Model.loadExternalPythonObject(model_obj_path)
     form_encoded = Model.encodeMatchFormData(form)
     
     try:
