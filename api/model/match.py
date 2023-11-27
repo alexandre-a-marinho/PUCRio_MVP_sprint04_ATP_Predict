@@ -4,10 +4,10 @@ from typing import Union
 
 from model import Base
 
-class Payment(Base):
-    __tablename__ = 'payments'
+class Match(Base):
+    __tablename__ = 'matches'
 
-    id = Column("pk_payment", Integer, primary_key = True)
+    id = Column("pk_match", Integer, primary_key = True)
     surface = Column(String(20), default = "Hard")
     year = Column(Integer, default = 2023)
     tourney_level = Column(String(1), default = "M")
@@ -49,15 +49,15 @@ class Payment(Base):
                  first_name:str, first_hand:str, first_id:int, first_rank:float, first_rank_points:float, first_age:float, first_height:float,
                  second_name:str, second_hand:str, second_id:int, second_rank:float, second_rank_points:float, second_age:float, second_height:float,
                  winner_code:int):
-        """Creates a Payment.
+        """Creates a Match.
 
         Arguments:
         description = description of the goods/services being paid for
         category = category of the goods/services being paid for (exs: Market, Sports, Restaurant, Trip, etc)
         subcategory = subcategory of the goods/services being paid for (ex: em Mercado: Hortifruti, Higiene, Açougue, etc)
-        value: total value of the Payment, in Reais (R$). It's the sum of all installments
+        value: total value of the Match, in Reais (R$). It's the sum of all installments
         nb_installments = number of monthly installments
-        insertion_date: when the Payment was inserted in the database
+        insertion_date: when the Match was inserted in the database
         """
         self.surface = surface
         self.year = year

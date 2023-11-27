@@ -1,4 +1,4 @@
-# Front-end of the "Payments Control" app
+# Front-end of the "Matches Control" app
 MVP of the first Sprint of the graduate program in Software Engineering at PUC-Rio (**MVP Sprint 01**)
 
 Author: Alexandre Alves Marinho

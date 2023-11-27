@@ -165,23 +165,23 @@ table {
     cursor: pointer;
 }
 
-#table-payments tr:nth-child(odd):not(tr.header-row) {
+#table-matches tr:nth-child(odd):not(tr.header-row) {
     background-color: #eee;
 }
 
-#table-payments tr:not(tr.header-row):hover {
+#table-matches tr:not(tr.header-row):hover {
     background: #d17f0b51; /*gold 50% opacity*/
 }
 
-#table-payments td:nth-child(22) {
+#table-matches td:nth-child(22) {
     background: rgba(26, 150, 10, 0.477);
 }
 
-#table-payments td:nth-child(23):hover {
+#table-matches td:nth-child(23):hover {
     background: rgb(0, 0, 0);
 }
 
-#table-payments {
+#table-matches {
    margin: 0;
    padding: 0;
 }

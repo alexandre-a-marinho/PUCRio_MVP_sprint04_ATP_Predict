@@ -6,21 +6,21 @@ from datetime import date
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy import func
 
-from model import Session, Payment, Model
+from model import Session, Match, Model
 from logger import logger
 from schemas import *
 from flask_cors import CORS
 
 
 # Creating OpenAPI object
-info = Info(title="Payments Control", version="1.0.0")
+info = Info(title="Matches Control", version="1.0.0")
 app = OpenAPI(__name__, info=info)
 CORS(app)
 
 # Defining tags
 home_tag = Tag(name="Documentation", description="Documentation selection: Swagger, Redoc or RapiDoc")
-payment_tag = Tag(name="Payment", description="Addition, visualization, edition and deletion of payments from the database")
-analysis_tag = Tag(name="Analysis", description="Statistics and analysis regarding the payments in the database")
+match_tag = Tag(name="Match", description="Addition, visualization, edition and deletion of matches from the database")
+analysis_tag = Tag(name="Analysis", description="Statistics and analysis regarding the matches in the database")
 
 # Sets cache
 app.config['CACHE_TYPE'] = 'simple'
@@ -36,12 +36,12 @@ def home():
     return redirect('/openapi')
 
 
-@app.post('/payment', tags=[payment_tag],
-          responses={"200": PaymentViewSchema, "409": ErrorSchema, "400": ErrorSchema})
-def add_payment(form: PaymentSchema):
-    """Adds a new Payment to the database.
+@app.post('/match', tags=[match_tag],
+          responses={"200": MatchViewSchema, "409": ErrorSchema, "400": ErrorSchema})
+def add_match(form: MatchSchema):
+    """Adds a new Match to the database.
 
-    Returns the representation of the added Payment (as per PaymentViewSchema).
+    Returns the representation of the added Match (as per MatchViewSchema).
     """
     
     # Loading the prediction model
@@ -49,7 +49,7 @@ def add_payment(form: PaymentSchema):
     model = Model.loadExternalPythonObject(model_obj_path)
     form_encoded = Model.encodeMatchFormData(form)
     
-    payment = Payment(
+    match = Match(
         surface = form.surface,
         year = form.year,
         tourney_level = form.tourney_level,
@@ -72,35 +72,35 @@ def add_payment(form: PaymentSchema):
         winner_code = Model.predictor(model, form_encoded)
     )
     
-    logger.debug(f"Added Match between '{payment.first_name}' and '{payment.second_name}'.")
+    logger.debug(f"Added Match between '{match.first_name}' and '{match.second_name}'.")
     try:
         # Creates database connection
         session = Session()
 
         # Adds new item to the database table and commits it
-        session.add(payment)
+        session.add(match)
         session.commit()
-        logger.debug(f"Added Match between '{payment.first_name}' and '{payment.second_name}'.")
-        return show_payment(payment), 200
+        logger.debug(f"Added Match between '{match.first_name}' and '{match.second_name}'.")
+        return show_match(match), 200
 
     except IntegrityError as e:
         error_msg = "Integrity error on new Match addition :/"
-        logger.warning(f"Error while adding Match #{payment.id} between '{payment.first_name}' and '{payment.second_name}': {error_msg}")
+        logger.warning(f"Error while adding Match #{match.id} between '{match.first_name}' and '{match.second_name}': {error_msg}")
         return {"message": error_msg}, 409
 
     except Exception as e:
         # in case of a non-expected error
         error_msg = "It was not possible to save the new Match :/"
-        logger.warning(f"Error while adding Match #{payment.id} between '{payment.first_name}' and '{payment.second_name}': {error_msg}")
+        logger.warning(f"Error while adding Match #{match.id} between '{match.first_name}' and '{match.second_name}': {error_msg}")
         return {"message": error_msg}, 400
 
 
-@app.put('/paymentedition', tags=[payment_tag],
-          responses={"200": PaymentViewSchema, "409": ErrorSchema, "400": ErrorSchema})
-def edit_payment(query: PaymentSearchSchema, form: PaymentSchema,):
-    """Edits an existing Payment in the database.
+@app.put('/matchedition', tags=[match_tag],
+          responses={"200": MatchViewSchema, "409": ErrorSchema, "400": ErrorSchema})
+def edit_match(query: MatchSearchSchema, form: MatchSchema,):
+    """Edits an existing Match in the database.
 
-    Returns the representation of the edited Payment (as per PaymentViewSchema).
+    Returns the representation of the edited Match (as per MatchViewSchema).
     """
     edited_match_id = query.id
     logger.debug(f"Editing Match #{edited_match_id} between '{form.first_name}' and '{form.second_name}'.")
@@ -115,7 +115,7 @@ def edit_payment(query: PaymentSearchSchema, form: PaymentSchema,):
         session = Session()
         
         # Selects item to edit it in the database table and then commits it
-        to_edit = session.query(Payment).filter(Payment.id == edited_match_id).first()
+        to_edit = session.query(Match).filter(Match.id == edited_match_id).first()
         to_edit.surface = form.surface
         to_edit.year = form.year
         to_edit.tourney_level = form.tourney_level
@@ -137,11 +137,11 @@ def edit_payment(query: PaymentSearchSchema, form: PaymentSchema,):
         to_edit.second_height = form.second_height
 
         winner_code = Model.predictor(model, form_encoded)
-        to_edit.winner = Payment.getUncodedWinner(winner_code, form)
+        to_edit.winner = Match.getUncodedWinner(winner_code, form)
 
         session.commit()
         
-        return show_payment(to_edit), 200
+        return show_match(to_edit), 200
 
     except IntegrityError as e:
         error_msg = "Integrity error on new Match addition :/"
@@ -155,81 +155,81 @@ def edit_payment(query: PaymentSearchSchema, form: PaymentSchema,):
         return {"message": error_msg}, 400
 
 
-@app.get('/payments', tags=[payment_tag],
-         responses={"200": PaymentsListSchema, "404": ErrorSchema})
-def get_payments():
-    """Searches for all registered Payments.
+@app.get('/matches', tags=[match_tag],
+         responses={"200": MatchesListSchema, "404": ErrorSchema})
+def get_matches():
+    """Searches for all registered Matches.
 
-    Returns the representation of a list of all registred Payments (if any exists).
+    Returns the representation of a list of all registred Matches (if any exists).
     """
-    logger.debug(f"Getting Payments")
+    logger.debug(f"Getting Matches")
     
     # Creates database connectio to perform the search
     session = Session()
-    payments = session.query(Payment).all()
+    matches = session.query(Match).all()
 
-    if payments:
-        logger.debug(f"%d Payments found" % len(payments))
-        print(payments)
-        # retuns the representation of the list of all payments found
-        return show_payments(payments), 200
+    if matches:
+        logger.debug(f"%d Matches found" % len(matches))
+        print(matches)
+        # retuns the representation of the list of all matches found
+        return show_matches(matches), 200
     else:
         # retorno empty if nothing is found
-        return {"payments": []}, 200
+        return {"matches": []}, 200
 
 
-@app.get('/payment', tags=[payment_tag],
-         responses={"200": PaymentViewSchema, "404": ErrorSchema})
-def get_payment(query: PaymentSearchSchema):
-    """Searches a Payment based on it's Id.
+@app.get('/match', tags=[match_tag],
+         responses={"200": MatchViewSchema, "404": ErrorSchema})
+def get_match(query: MatchSearchSchema):
+    """Searches a Match based on it's Id.
 
-    Returns the representation of a Payment (if found).
+    Returns the representation of a Match (if found).
     """
-    payment_id = query.id
-    logger.debug(f"Getting Payment data #{payment_id}")
+    match_id = query.id
+    logger.debug(f"Getting Match data #{match_id}")
 
     # Creates database connectio to perform the search
     session = Session()
 
-    # Searchs using payment Id
-    payment = session.query(Payment).filter(Payment.id == payment_id).first()
+    # Searchs using match Id
+    match = session.query(Match).filter(Match.id == match_id).first()
 
-    if payment:
-        logger.debug(f"Payment found: #{payment_id}")
-        return show_payment(payment), 200
+    if match:
+        logger.debug(f"Match found: #{match_id}")
+        return show_match(match), 200
     else:
-        error_msg = "Payment not found in database :/"
-        logger.warning(f"Error while searching for Match #{payment.id} between '{payment.first_name}' and '{payment.second_name}': {error_msg}")
+        error_msg = "Match not found in database :/"
+        logger.warning(f"Error while searching for Match #{match.id} between '{match.first_name}' and '{match.second_name}': {error_msg}")
         return {"message": error_msg}, 404
 
 
-@app.delete('/payment', tags=[payment_tag],
-            responses={"200": PaymentDelSchema, "404": ErrorSchema})
-def del_payment(query: PaymentSearchSchema):
-    """Deletes a Payment based on it's Id.
+@app.delete('/match', tags=[match_tag],
+            responses={"200": MatchDelSchema, "404": ErrorSchema})
+def del_match(query: MatchSearchSchema):
+    """Deletes a Match based on it's Id.
 
-    Returns a message confirming target Payment deletion.
+    Returns a message confirming target Match deletion.
     """
-    payment_id = query.id
-    logger.debug(f"Deleting Payment #{payment_id}")
+    match_id = query.id
+    logger.debug(f"Deleting Match #{match_id}")
 
     # Creates database connection to perform the search
     session = Session()
     
-    # Searching and deleting target Payment
-    payment_to_delete: Payment = session.query(Payment).filter(Payment.id == payment_id).first()
-    payment_first_name = payment_to_delete.first_name
-    payment_second_name = payment_to_delete.second_name
-    payment_deletion_success = session.query(Payment).filter(Payment.id == payment_id).delete()
+    # Searching and deleting target Match
+    match_to_delete: Match = session.query(Match).filter(Match.id == match_id).first()
+    match_first_name = match_to_delete.first_name
+    match_second_name = match_to_delete.second_name
+    match_deletion_success = session.query(Match).filter(Match.id == match_id).delete()
     session.commit()
 
-    if payment_deletion_success:
-        logger.debug(f"Match deleted #{payment_id}, between '{payment_first_name}' and '{payment_second_name}'")
+    if match_deletion_success:
+        logger.debug(f"Match deleted #{match_id}, between '{match_first_name}' and '{match_second_name}'")
         # retuns the representation of the confirmation message
-        return {"message": "Match deleted", "id": payment_id, "player one": payment_first_name, "player two": payment_second_name}
+        return {"message": "Match deleted", "id": match_id, "player one": match_first_name, "player two": match_second_name}
     else:
         error_msg = "Match not found in database :/"
-        logger.warning(f"Error while deleting Match #{payment_id} between '{payment_first_name}' and '{payment_second_name}': {error_msg}")
+        logger.warning(f"Error while deleting Match #{match_id} between '{match_first_name}' and '{match_second_name}': {error_msg}")
         return {"message": error_msg}, 404
 
 

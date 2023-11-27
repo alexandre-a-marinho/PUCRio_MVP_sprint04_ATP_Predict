@@ -29,13 +29,13 @@ const attributes = Object.freeze({
 
 /*
   --------------------------------------------------------------------------------------
-  Function to get a payment from the server database, via GET request
+  Function to get a match from the server database, via GET request
   --------------------------------------------------------------------------------------
 */
 const getItem = async function (item_id) {
   console.log(item_id);
   let item = {};
-  let url = 'http://127.0.0.1:5000/payment?id=' + item_id;
+  let url = 'http://127.0.0.1:5000/match?id=' + item_id;
   await fetch(url, {
     method: 'get'
   })
@@ -69,18 +69,18 @@ const getItem = async function (item_id) {
 
 /*
   --------------------------------------------------------------------------------------
-  Function to obtain the list of existing payments from the server database, via GET request
+  Function to obtain the list of existing matches from the server database, via GET request
   --------------------------------------------------------------------------------------
 */
 const getList = async () => {
 
-  let url = 'http://127.0.0.1:5000/payments';
+  let url = 'http://127.0.0.1:5000/matches';
   await fetch(url, {
     method: 'get',
   })
     .then((response) => response.json())
     .then((data) => {
-      data.payments.forEach(item => insertItemInterface(item.id, item.surface, item.year,
+      data.matches.forEach(item => insertItemInterface(item.id, item.surface, item.year,
                                                         item.tourney_level, item.best_of_x_sets, item.tourney_round,
                                                         item.first_name, item.first_id, item.first_rank, item.first_rank_points,
                                                         item.first_hand, item.first_height, item.first_age,
@@ -98,7 +98,7 @@ const getList = async () => {
 
 /*
   --------------------------------------------------------------------------------------
-  Function to clear the "new payment" insertion form
+  Function to clear the "new match" insertion form
   --------------------------------------------------------------------------------------
 */
 const clearForm = () => {
@@ -126,7 +126,7 @@ const clearForm = () => {
 
 /*
   --------------------------------------------------------------------------------------
-  Function to insert new payment, first in the interface
+  Function to insert new match, first in the interface
   (with insertItemInterface()), and then on the server bank (with postItem())
   --------------------------------------------------------------------------------------
 */
@@ -236,7 +236,7 @@ const newItem = async () => {
 
 /*
   --------------------------------------------------------------------------------------
-  Function to edit payment, first in the interface
+  Function to edit match, first in the interface
   (with insertItemInterface()), and then on the server bank (with postItem())
   --------------------------------------------------------------------------------------
 */
@@ -320,8 +320,8 @@ const editItem = async () => {
       input_second_age,
       item_id);
     
-    // TODO [MVP3-20]: improve code by updating only the edited payment in the interface
-    let table = document.getElementById('table-payments');
+    // TODO [MVP3-20]: improve code by updating only the edited match in the interface
+    let table = document.getElementById('table-matches');
     for (let i = table.rows.length - 1; i > 0; i--) {
       table.deleteRow(i);
     }
@@ -341,14 +341,14 @@ const editItem = async () => {
     id_form_label.style.display = "none";
     clearForm();
 
-    alert("Payment edited!");
+    alert("Match edited!");
   }
 }
 
 
 /*
   --------------------------------------------------------------------------------------
-  Function to insert new payment, first in the interface
+  Function to insert new match, first in the interface
   (with insertItemInterface()), and then on the server bank (with postItem())
   --------------------------------------------------------------------------------------
 */
@@ -372,7 +372,7 @@ const cancelEdition = async () => {
 
 /*
   --------------------------------------------------------------------------------------
-  Function to add new payment in the server database, via POST request
+  Function to add new match in the server database, via POST request
   --------------------------------------------------------------------------------------
 */
 const postItem = async (surface, year, tourney_level, best_of_x_sets, tourney_round,
@@ -398,28 +398,28 @@ const postItem = async (surface, year, tourney_level, best_of_x_sets, tourney_ro
   formData.append('second_hand', second_hand);
   formData.append('second_height', second_height);
   formData.append('second_age', second_age);
-  let new_payment = {};
+  let new_match = {};
 
-  let url = 'http://127.0.0.1:5000/payment';
+  let url = 'http://127.0.0.1:5000/match';
   await fetch(url, {
     method: 'post',
     body: formData
   })
     .then((response) => response.json())
     .then((data) => {
-      new_payment = data;
+      new_match = data;
     })
     .catch((error) => {
       console.error('Error:', error);
     });
 
-  return new_payment;
+  return new_match;
 }
 
 
 /*
   --------------------------------------------------------------------------------------
-  Function to edit payment in the server database, via PUT request
+  Function to edit match in the server database, via PUT request
   --------------------------------------------------------------------------------------
 */
 const putItem = async (surface, year, tourney_level, best_of_x_sets, tourney_round,
@@ -446,35 +446,35 @@ const putItem = async (surface, year, tourney_level, best_of_x_sets, tourney_rou
   formData.append('second_hand', second_hand);
   formData.append('second_height', second_height);
   formData.append('second_age', second_age);
-  let edited_payment = {};
+  let edited_match = {};
 
-  let url = 'http://127.0.0.1:5000/paymentedition?id=' + item_id;
+  let url = 'http://127.0.0.1:5000/matchedition?id=' + item_id;
   await fetch(url, {
     method: 'put',
     body: formData
   })
     .then((response) => response.json())
     .then((data) => {
-      edited_payment = data;
+      edited_match = data;
     })
     .catch((error) => {
       console.error('Error:', error);
     });
 
-  return edited_payment;
+  return edited_match;
 }
 
 
 /*
   --------------------------------------------------------------------------------------
-  Function to insert new payment in the interface
+  Function to insert new match in the interface
   --------------------------------------------------------------------------------------
 */
 const insertItemInterface = (id, surface, year, tourney_level, best_of_x_sets, tourney_round,
                              first_name, first_id, first_rank, first_rank_points, first_hand, first_height, first_age,
                              second_name, second_id, second_rank, second_rank_points, second_hand, second_height, second_age,
                              winner) => {
-  let table = document.getElementById('table-payments');
+  let table = document.getElementById('table-matches');
   let row = table.insertRow();
   const item = [id, surface, year, tourney_level, best_of_x_sets, tourney_round,
                 first_name, first_id, first_rank, first_rank_points, first_hand, first_height, first_age,
@@ -482,10 +482,10 @@ const insertItemInterface = (id, surface, year, tourney_level, best_of_x_sets, t
                 winner];
   const row_data_length = item.length;
 
-  // Inserts 'edition' button at the beginning of each line of the UI payments table
+  // Inserts 'edition' button at the beginning of each line of the UI matches table
   insertEditionItemButton(row.insertCell(0));
   
-  // Inserts cells corresponding to each attribute in a row of the UI payments table
+  // Inserts cells corresponding to each attribute in a row of the UI matches table
   for (var cell_idx = 1; cell_idx <= row_data_length; cell_idx++) {
     var cel = row.insertCell(cell_idx);
 
@@ -495,7 +495,7 @@ const insertItemInterface = (id, surface, year, tourney_level, best_of_x_sets, t
     cel.textContent = attribute_value;
   }
 
-  // Inserts 'delete' button at the end of each line of the UI payments table
+  // Inserts 'delete' button at the end of each line of the UI matches table
   insertDeleteItemButton(row.insertCell(-1));
 
   clearForm();
@@ -504,7 +504,7 @@ const insertItemInterface = (id, surface, year, tourney_level, best_of_x_sets, t
 
 /*
   --------------------------------------------------------------------------------------
-  Function to create a 'delete' button on each line of the UI payments table
+  Function to create a 'delete' button on each line of the UI matches table
   --------------------------------------------------------------------------------------
 */
 const insertDeleteItemButton = (parent) => {
@@ -517,7 +517,7 @@ const insertDeleteItemButton = (parent) => {
 
 /*
   --------------------------------------------------------------------------------------
-  Function to create a 'edition' button on each line of the UI payments table
+  Function to create a 'edition' button on each line of the UI matches table
   --------------------------------------------------------------------------------------
 */
 const insertEditionItemButton = (parent) => {
@@ -530,7 +530,7 @@ const insertEditionItemButton = (parent) => {
 
 /*
   --------------------------------------------------------------------------------------
-  Create function to delete payment and connect it to each 'delete' button in the interface
+  Create function to delete match and connect it to each 'delete' button in the interface
   --------------------------------------------------------------------------------------
 */
 const connectDeleteFunctionsToButtons = () => {
@@ -563,7 +563,7 @@ const connectDeleteFunctionsToButtons = () => {
           clearForm();
         }
 
-        alert("Payment deleted!");
+        alert("Match deleted!");
       }
     }
   }
@@ -572,7 +572,7 @@ const connectDeleteFunctionsToButtons = () => {
 
 /*
   --------------------------------------------------------------------------------------
-  Create function to edit payment and connect it to each 'edition' button in the interface
+  Create function to edit match and connect it to each 'edition' button in the interface
   --------------------------------------------------------------------------------------
 */
 const connectEditFunctionsToButtons = () => {
@@ -628,12 +628,12 @@ const connectEditFunctionsToButtons = () => {
 
 /*
   --------------------------------------------------------------------------------------
-  Function to delete a payment from the server database, via DELETE request
+  Function to delete a match from the server database, via DELETE request
   --------------------------------------------------------------------------------------
 */
 const deleteItem = (item_id) => {
   console.log(item_id);
-  let url = 'http://127.0.0.1:5000/payment?id=' + item_id;
+  let url = 'http://127.0.0.1:5000/match?id=' + item_id;
   fetch(url, {
     method: 'delete'
   })
@@ -646,7 +646,7 @@ const deleteItem = (item_id) => {
 
 /*
   --------------------------------------------------------------------------------------
-  Function call for initial loading of the UI payments table
+  Function call for initial loading of the UI matches table
   --------------------------------------------------------------------------------------
 */
 getList();
