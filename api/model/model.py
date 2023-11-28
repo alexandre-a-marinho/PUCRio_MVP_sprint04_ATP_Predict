@@ -7,39 +7,46 @@ from sklearn.preprocessing import LabelEncoder
 
 class Model:
     
-    def loadExternalPythonObject(path):
-        """Dependendo se o final for .pkl ou .joblib, carregamos de uma forma ou de outra
+    def loadExternalPythonObject(filepath):
+        """Loads external object file according to file extension (.pkl or .joblib)
+
+        Arguments:
+        filepath = filepath of encoded object file
         """
         
-        if path.endswith('.pkl'):
-            pyobj = pickle.load(open(path, 'rb'))
-        elif path.endswith('.joblib'):
-            pyobj = joblib.load(path)
+        if filepath.endswith('.pkl'):
+            pyobj = pickle.load(open(filepath, 'rb'))
+        elif filepath.endswith('.joblib'):
+            pyobj = joblib.load(filepath)
         else:
-            raise Exception('Formato de arquivo não suportado')
+            raise Exception('File extension not supported!')
         return pyobj
     
-    def predictor(model, form):
-        """Realiza a predição de um paciente com base no modelo treinado
+    def predictor(model, form_encoded):
+        """Predicts match result based on a pre-trained model object
+
+        Arguments:
+        model = pre-trained model object
+        form_encoded = match form containing encoded input data
         """
-        x_input = np.array([  #FIXME: verify order of data in model, must be the same here
-            form["surface"], 
-            form["tourney_level"], 
-            form["second_id"],
-            form["second_hand"], 
-            form["second_height"],
-            form["second_age"],
-            form["first_id"],
-            form["first_hand"], 
-            form["first_height"],
-            form["first_age"],
-            form["best_of_x_sets"], 
-            form["tourney_round"], 
-            form["second_rank"],
-            form["second_rank_points"],
-            form["first_rank"],
-            form["first_rank_points"],
-            form["year"]])
+        x_input = np.array([
+            form_encoded["surface"], 
+            form_encoded["tourney_level"], 
+            form_encoded["second_id"],
+            form_encoded["second_hand"], 
+            form_encoded["second_height"],
+            form_encoded["second_age"],
+            form_encoded["first_id"],
+            form_encoded["first_hand"], 
+            form_encoded["first_height"],
+            form_encoded["first_age"],
+            form_encoded["best_of_x_sets"], 
+            form_encoded["tourney_round"], 
+            form_encoded["second_rank"],
+            form_encoded["second_rank_points"],
+            form_encoded["first_rank"],
+            form_encoded["first_rank_points"],
+            form_encoded["year"]])
 
         feature_names = ["surface",
                          "tourney_level",
@@ -73,6 +80,11 @@ class Model:
     
     @staticmethod
     def encodeMatchFormData (form):
+        """Encodes string data fields from match form to match encoding of the pre-trained model
+
+        Arguments:
+        form = match form containing unencoded form data
+        """
         form_encoded = {
             "surface" : form.surface,
             "year" : form.year,

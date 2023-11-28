@@ -9,7 +9,7 @@ from datetime import date
 class MatchSchema(BaseModel):
     """Defines how a new Match must be represented for database insertion"""
     surface: str = "Hard"
-    year: int = 2023
+    year: int = 2022
     tourney_level: str = "M"
     best_of_x_sets: int = 3
     tourney_round: str = "F"
@@ -46,7 +46,7 @@ class MatchViewSchema(BaseModel):
     """Defines how to return a single Match."""
     id: int = 1
     surface: str = "Hard"
-    year: int = 2023
+    year: int = 2022
     tourney_level: str = "M"
     best_of_x_sets: int = 3
     tourney_round: str = "F"

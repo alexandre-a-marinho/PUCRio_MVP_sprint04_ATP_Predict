@@ -67,6 +67,7 @@ const getItem = async function (item_id) {
   return item;
 }
 
+
 /*
   --------------------------------------------------------------------------------------
   Function to obtain the list of existing matches from the server database, via GET request
@@ -367,7 +368,6 @@ const cancelEdition = async () => {
   clearForm();
   alert("Edition canceled!");
 }
-
 
 
 /*

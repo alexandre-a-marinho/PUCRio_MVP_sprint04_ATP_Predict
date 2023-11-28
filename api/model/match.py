@@ -28,22 +28,6 @@ class Match(Base):
     second_height = Column(Float, default = 180.0)
     second_age = Column(Float, default = 26.0)
     winner = Column(String(40))
-    
-    # # Define constraints to limit some fields to specific values | FIXME: not working yet...
-    # __surfaces = ["Carpet", "Clay", "Grass", "Hard"]
-    # __hands = {"L", "R"}
-    # # A: ATP level (250, 500), D: Davis Cup, F: ATP Finals, G: Grand Slams, M: Masters 1000
-    # __tourney_levels = ["A", "D", "F", "G", "M"]
-    # # BR: ?, ER: ?: F: final, QF: quarter-fnal, RR: round robin, SF: semi-final
-    # __tourney_rounds = ["BR", "ER", "F", "QF", "R128", "R16", "R32", "R64", "RR", "SF"]
-    
-    # __table_args__ = (
-    #     CheckConstraint(surface.in_(__surfaces),name='check_valid_surface'),
-    #     CheckConstraint(first_hand.in_(__hands),name='check_valid_first_hand'),
-    #     CheckConstraint(second_hand.in_(__hands),name='check_valid_second_hand'),
-    #     CheckConstraint(tourney_level.in_(__tourney_levels),name='check_valid_tourney_level'),
-    #     CheckConstraint(tourney_round.in_(__tourney_rounds),name='check_valid_tourney_round'),
-    # )
 
     def __init__(self, surface:str, year:int, tourney_level:str, best_of_x_sets:int, tourney_round:str,
                  first_name:str, first_hand:str, first_id:int, first_rank:float, first_rank_points:float, first_age:float, first_height:float,
@@ -52,12 +36,25 @@ class Match(Base):
         """Creates a Match.
 
         Arguments:
-        description = description of the goods/services being paid for
-        category = category of the goods/services being paid for (exs: Market, Sports, Restaurant, Trip, etc)
-        subcategory = subcategory of the goods/services being paid for (ex: em Mercado: Hortifruti, Higiene, Açougue, etc)
-        value: total value of the Match, in Reais (R$). It's the sum of all installments
-        nb_installments = number of monthly installments
-        insertion_date: when the Match was inserted in the database
+        surface = court surface type ("Carpet", "Grass", "Hard", "Clay")
+        year = year in which the match took place
+        tourney_level = level of difficulty of the tournament ()"A": ATP 250/500, "D": Davis Cup, "F": ATP Finals , "G": Grand Slam, "M": MAster 1000)
+        best_of_x_sets: Maximum nuber of sets to be played in the match (3, 5)
+        tourney_round = tournament rounf ("BR", "ER", "F": final, "QF": quarter-final, "R128", "R16", "R32", "R64", "RR": round robin, "SF": semi-final)
+        first_name: name of player 1
+        first_id: ATP id of player 1
+        first_rank: ATP rank of player 1
+        first_rank_points: ATP rank points of player 1
+        first_hand: dominant hand of player 1 ("L": left, "R": right)
+        first_height: height of player 1
+        first_age: age of player 1
+        second_name: name of player 2
+        second_id: ATP id of player 2
+        second_rank: ATP rank of player 2
+        second_rank_points: ATP rank points of player 2
+        second_hand: dominant hand of player 2 ("L": left, "R": right)
+        second_height: height of player 2
+        second_age: age of player 2
         """
         self.surface = surface
         self.year = year
@@ -88,9 +85,15 @@ class Match(Base):
             
     @staticmethod
     def getUncodedWinner(winner_code, form):
+        """Gets winner string name based ou winner integer code.
+        
+        Arguments:
+        winner_code = match winner integer code (0 or 1)
+        form = match form containing string names of the players
+        """
         if (winner_code == 0):
             return  form.first_name
         elif (winner_code == 1):
             return  form.second_name
         else:
-            return "invalid winner code"
+            return "Invalid winner code!"
