@@ -84,7 +84,7 @@ class Match(Base):
             self.winner = "invalid winner code"
             
     @staticmethod
-    def getUncodedWinner(winner_code, form):
+    def get_uncoded_winner(winner_code, form):
         """Gets winner string name based ou winner integer code.
         
         Arguments:

@@ -46,8 +46,8 @@ def add_match(form: MatchSchema):
     
     # Loading the prediction model
     model_obj_path = 'ml_model/atp_model.pkl'
-    model = Model.loadExternalPythonObject(model_obj_path)
-    form_encoded = Model.encodeMatchFormData(form)
+    model = Model.load_external_python_object(model_obj_path)
+    form_encoded = Model.encode_match_form_data(form)
     
     match = Match(
         surface = form.surface,
@@ -107,8 +107,8 @@ def edit_match(query: MatchSearchSchema, form: MatchSchema,):
     
     # Loading the prediction model
     model_obj_path = 'ml_model/atp_model.pkl'
-    model = Model.loadExternalPythonObject(model_obj_path)
-    form_encoded = Model.encodeMatchFormData(form)
+    model = Model.load_external_python_object(model_obj_path)
+    form_encoded = Model.encode_match_form_data(form)
     
     try:
         # Creates database connection
@@ -137,7 +137,7 @@ def edit_match(query: MatchSearchSchema, form: MatchSchema,):
         to_edit.second_height = form.second_height
 
         winner_code = Model.predictor(model, form_encoded)
-        to_edit.winner = Match.getUncodedWinner(winner_code, form)
+        to_edit.winner = Match.get_uncoded_winner(winner_code, form)
 
         session.commit()
         

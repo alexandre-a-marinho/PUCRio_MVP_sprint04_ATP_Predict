@@ -7,7 +7,7 @@ from sklearn.preprocessing import LabelEncoder
 
 class Model:
     
-    def loadExternalPythonObject(filepath):
+    def load_external_python_object(filepath):
         """Loads external object file according to file extension (.pkl or .joblib)
 
         Arguments:
@@ -71,7 +71,7 @@ class Model:
         
         # Scale input according to training dataset
         scaler_standard_path = 'ml_model/atp_scaler_standard.pkl'
-        scaler_standard = Model.loadExternalPythonObject(scaler_standard_path)
+        scaler_standard = Model.load_external_python_object(scaler_standard_path)
         x_input_df = scaler_standard.transform(x_input_df)
         
         winner = model.predict(x_input_df)
@@ -79,7 +79,7 @@ class Model:
         return int(winner[0])
     
     @staticmethod
-    def encodeMatchFormData (form):
+    def encode_match_form_data (form):
         """Encodes string data fields from match form to match encoding of the pre-trained model
 
         Arguments:
