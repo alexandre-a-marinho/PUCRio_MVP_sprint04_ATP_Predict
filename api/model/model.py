@@ -70,7 +70,7 @@ class Model:
         x_input_df = pd.DataFrame([x_input], columns=feature_names)
         
         # Scale input according to training dataset
-        scaler_standard_path = 'ml_model/atp_scaler_standard.pkl'
+        scaler_standard_path = 'ml_model/atp_scaler_norm.pkl'
         scaler_standard = Model.load_external_python_object(scaler_standard_path)
         x_input_df = scaler_standard.transform(x_input_df)
         

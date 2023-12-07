@@ -45,7 +45,7 @@ def add_match(form: MatchSchema):
     """
     
     # Loading the prediction model
-    model_obj_path = 'ml_model/atp_model.pkl'
+    model_obj_path = 'ml_model/atp_model_svm.pkl'
     model = Model.load_external_python_object(model_obj_path)
     form_encoded = Model.encode_match_form_data(form)
     
@@ -106,7 +106,7 @@ def edit_match(query: MatchSearchSchema, form: MatchSchema,):
     logger.debug(f"Editing Match #{edited_match_id} between '{form.first_name}' and '{form.second_name}'.")
     
     # Loading the prediction model
-    model_obj_path = 'ml_model/atp_model.pkl'
+    model_obj_path = 'ml_model/atp_model_svm.pkl'
     model = Model.load_external_python_object(model_obj_path)
     form_encoded = Model.encode_match_form_data(form)
     
