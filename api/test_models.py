@@ -36,19 +36,19 @@ def test_model_svm():
     assert precisao_svm >= 0.5 
     assert f1_svm >= 0.5 
  
-# Method to test the KNN model based on a given model file
-def test_model_knn():
+# Method to test the RFC model based on a given model file
+def test_model_rfc():
     # Importing the model
-    knn_model_obj_path = 'ml_model/atp_model_knn.pkl'
-    model_knn = model.load_external_python_object(knn_model_obj_path)
+    rfc_model_obj_path = 'ml_model/atp_model_rfc.pkl'
+    model_rfc = model.load_external_python_object(rfc_model_obj_path)
 
-    # Obtaining KNN metrics
-    accuracy_knn, recall_knn, precisao_knn, f1_knn = evaluator.evaluate(model_knn, X, Y)
+    # Obtaining RFC metrics
+    accuracy_rfc, recall_rfc, precisao_rfc, f1_rfc = evaluator.evaluate(model_rfc, X, Y)
     
-    # Testing KNN metrics
-    assert accuracy_knn >= 0.75
-    assert recall_knn >= 0.5 
-    assert precisao_knn >= 0.5 
-    assert f1_knn >= 0.5 
+    # Testing RFC metrics
+    assert accuracy_rfc >= 0.75
+    assert recall_rfc >= 0.5 
+    assert precisao_rfc >= 0.5 
+    assert f1_rfc >= 0.5 
     
 
