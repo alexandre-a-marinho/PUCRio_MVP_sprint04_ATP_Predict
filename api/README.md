@@ -1,11 +1,11 @@
-# ATP Predict
+# PUCRio_MVP_sprint04_ATP_Predict - Backend
 
 MVP of the fourth Sprint of the graduate program in Software Engineering at PUC-Rio (**MVP Sprint 04**)
 
 Author: Alexandre Alves Marinho
 
 ---
-## How to execute:
+## How to run (development mode):
 
 It is strongly recommended to use virtual environments like [virtualenv](https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/#creating-a-virtual-environment).
  
@@ -28,7 +28,7 @@ automatically after a source code change.
 
 Open [http://localhost:5000/#/](http://localhost:5000/#/) in browser to check status and documentation of running API.
 
-## How to execute using the Docker container
+## How to run (Docker mode):
 
 Be sure to have [Docker](https://docs.docker.com/engine/install/) installed and in execution in your machine.
 

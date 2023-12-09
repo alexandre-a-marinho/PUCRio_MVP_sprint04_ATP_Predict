@@ -1,17 +1,20 @@
-# Front-end of the "Matches Control" app
+# # PUCRio_MVP_sprint04_ATP_Predict - Frontend
 MVP of the fourth Sprint of the graduate program in Software Engineering at PUC-Rio (**MVP Sprint 04**)
 
 Author: Alexandre Alves Marinho
 
 ---
-## How to run (development mode)
+## How to run (development mode):
 
 Just download the project and open the index.html file in your browser.
 
 ---
-## How to run (Docker mode)
+## How to run (Docker mode):
 
 Be sure to have [Docker](https://docs.docker.com/engine/install/) installed and in execution in your machine.
+
+Navigate to the directory containing the Dockerfile in the terminal.
+Run **as administrator** the following command to build the Docker image:
 
 ```
 $ docker build -t front-match-prediction .
