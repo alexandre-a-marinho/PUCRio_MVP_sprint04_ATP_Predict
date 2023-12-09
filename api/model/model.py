@@ -7,6 +7,7 @@ from sklearn.preprocessing import LabelEncoder
 
 class Model:
     
+    @staticmethod
     def load_external_python_object(filepath):
         """Loads external object file according to file extension (.pkl or .joblib)
 
@@ -22,6 +23,7 @@ class Model:
             raise Exception('File extension not supported!')
         return pyobj
     
+    @staticmethod
     def predictor(model, form_encoded):
         """Predicts match result based on a pre-trained model object
 
