@@ -18,7 +18,7 @@
     <!-- System information header -->
     <header>
         <div class="title">
-            <h2>ATP MATCH PREDICTION</h2>
+            <h2>ATP MATCH PREDICTION - SINGLES</h2>
         </div>
         <div class="banner">
             <img src="./img/tennis_banner.jpg" alt="y">
@@ -27,6 +27,11 @@
 
     <!-- Content -->
     <div class="container">
+        <div class="row g-5">
+            <a href="https://www.atptour.com/en/rankings/singles" id="link" target="_blank">ACCESS ATP RANKINGS AND PLAYER DATA</a>
+            <span onclick="openCSVFile()" id="link">*GET PLAYER ATP IDs</span>
+            <hr class="rounded">
+        </div>
         <div class="row g-5">
             <div class="col-md-4">
                 <!-- Options to add a new item -->
@@ -94,7 +99,7 @@
                     <input type="text" id="newFirstName" class="form-control rounded" placeholder="">
                 </div>
                 <div class="row mb-2">
-                    <label for="newFirstId"><b>Id:</b></label>
+                    <label for="newFirstId"><b>*ID:</b></label>
                     <input type="number" id="newFirstId" class="form-control rounded" placeholder="0">
                 </div>
                 <div class="row mb-2">
@@ -131,7 +136,7 @@
                     <input type="text" id="newSecondName" class="form-control rounded" placeholder="">
                 </div>
                 <div class="row mb-2">
-                    <label for="newSecondId"><b>Id:</b></label>
+                    <label for="newSecondId"><b>*ID:</b></label>
                     <input type="number" id="newSecondId" class="form-control rounded" placeholder="0">
                 </div>
                 <div class="row mb-2">
@@ -159,9 +164,13 @@
                 </div>
             </div>
             <div class="row mb-2">
+                <hr class="rounded">
                 <span onclick="newItem()" id="addBtn">Predict Match</span>
                 <span onclick="editItem()" id="editBtn">Finish Edition</span>
                 <span onclick="cancelEdition()" id="cancelEditBtn">Cancel Edition</span>
+                <p>
+                <hr class="rounded">
+                <p>
             </div>
         </div>
         <div class="row g-7">

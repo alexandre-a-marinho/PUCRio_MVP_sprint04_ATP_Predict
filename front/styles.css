@@ -54,6 +54,23 @@ hr.rounded {
     height: 50px;
 }
 
+#link {
+    padding: 2px 2px;
+    background-color: rgb(120, 203, 150);
+    color: white;
+    text-align: center;
+    font-size: 18px;
+    cursor: pointer;
+    transition: 0.3s;
+    border-radius:5px;
+    display: inline;
+}
+
+#link:hover {
+    background-color: #0e5e37; /*gold 100% opacity*/
+    color: white;
+}
+
 #addBtn {
     padding: 10px 10px;
     background-color: rgb(35, 32, 24);

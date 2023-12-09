@@ -646,6 +646,17 @@ const deleteItem = (item_id) => {
 
 /*
   --------------------------------------------------------------------------------------
+  Function to download/open csv file with player ID data
+  --------------------------------------------------------------------------------------
+*/
+const openCSVFile = () => {
+  let csvFilePath = 'resources/atp_players_till_2022.csv';
+  window.open(csvFilePath, '_blank');
+}
+
+
+/*
+  --------------------------------------------------------------------------------------
   Function call for initial loading of the UI matches table
   --------------------------------------------------------------------------------------
 */
