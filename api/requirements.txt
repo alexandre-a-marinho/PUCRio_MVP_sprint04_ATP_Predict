@@ -39,4 +39,5 @@ tomli==2.0.1
 typing_extensions==4.3.0
 tzdata==2023.3
 Werkzeug==2.1.2
+xgboost==2.0.2
 zipp==3.8.1

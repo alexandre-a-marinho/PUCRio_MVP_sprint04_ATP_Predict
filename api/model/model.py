@@ -24,12 +24,13 @@ class Model:
         return pyobj
     
     @staticmethod
-    def predictor(model, form_encoded):
+    def predictor(model, form_encoded, has_scaling):
         """Predicts match result based on a pre-trained model object
 
         Arguments:
         model = pre-trained model object
         form_encoded = match form containing encoded input data
+        has_scaling = flag to apply or not scaling transformations
         """
         x_input = np.array([
             form_encoded["surface"], 
@@ -72,9 +73,10 @@ class Model:
         x_input_df = pd.DataFrame([x_input], columns=feature_names)
         
         # Scale input according to training dataset
-        scaler_standard_path = 'ml_model/atp_scaler.pkl'
-        scaler_standard = Model.load_external_python_object(scaler_standard_path)
-        x_input_df = scaler_standard.transform(x_input_df)
+        if has_scaling:
+            scaler_standard_path = 'ml_model/atp_scaler.pkl'
+            scaler_standard = Model.load_external_python_object(scaler_standard_path)
+            x_input_df = scaler_standard.transform(x_input_df)
         
         winner = model.predict(x_input_df)
 

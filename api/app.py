@@ -69,7 +69,7 @@ def add_match(form: MatchSchema):
         second_rank_points = form.second_rank_points,
         second_age = form.second_age,
         second_height = form.second_height,
-        winner_code = Model.predictor(model, form_encoded)
+        winner_code = Model.predictor(model, form_encoded, True)
     )
     
     logger.debug(f"Added Match between '{match.first_name}' and '{match.second_name}'.")
@@ -136,7 +136,7 @@ def edit_match(query: MatchSearchSchema, form: MatchSchema,):
         to_edit.second_age = form.second_age
         to_edit.second_height = form.second_height
 
-        winner_code = Model.predictor(model, form_encoded)
+        winner_code = Model.predictor(model, form_encoded, True)
         to_edit.winner = Match.get_uncoded_winner(winner_code, form)
 
         session.commit()

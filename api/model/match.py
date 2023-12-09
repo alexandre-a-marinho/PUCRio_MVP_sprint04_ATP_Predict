@@ -77,9 +77,9 @@ class Match(Base):
         self.second_age = second_age
         
         if (winner_code == 0):
-            self.winner = first_name
-        elif (winner_code == 1):
             self.winner = second_name
+        elif (winner_code == 1):
+            self.winner = first_name
         else:
             self.winner = "invalid winner code"
             
@@ -92,8 +92,8 @@ class Match(Base):
         form = match form containing string names of the players
         """
         if (winner_code == 0):
-            return  form.first_name
-        elif (winner_code == 1):
             return  form.second_name
+        elif (winner_code == 1):
+            return  form.first_name
         else:
             return "Invalid winner code!"
