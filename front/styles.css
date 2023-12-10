@@ -186,8 +186,28 @@ table {
     background: #d17f0b51; /*gold 50% opacity*/
 }
 
+#table-matches td:nth-child(3) {
+    border-left: 4px solid #000000;
+}
+
+#table-matches td:nth-child(8) {
+    border-left: 4px solid #000000;
+    font-weight: bold;
+}
+
+#table-matches td:nth-child(15) {
+    border-left: 4px solid #000000;
+    font-weight: bold;
+}
+
 #table-matches td:nth-child(22) {
     background: rgba(26, 150, 10, 0.477);
+    border-left: 4px solid #000000;
+    font-weight: bold;
+}
+
+#table-matches td:nth-child(23) {
+    border-left: 4px solid #000000;
 }
 
 #table-matches td:nth-child(23):hover {
