@@ -17,14 +17,14 @@ class MatchSchema(BaseModel):
     first_hand: str = "R"
     first_id: int = 104925
     first_rank: float = 1
-    first_rank_points: float = 11500
+    first_rank_points: float = 11245
     first_age: float = 36
     first_height: float = 188
     second_name: str = "Alcaraz"
     second_hand: str = "R"
     second_id: int = 106688
     second_rank: float = 2
-    second_rank_points: float = 9500
+    second_rank_points: float = 8855
     second_age: float = 20
     second_height: float = 183
 
@@ -54,14 +54,14 @@ class MatchViewSchema(BaseModel):
     first_hand: str = "R"
     first_id: int = 104925
     first_rank: float = 1
-    first_rank_points: float = 11500
+    first_rank_points: float = 11245
     first_age: float = 36
     first_height: float = 188
     second_name: str = "Alcaraz"
     second_hand: str = "R"
     second_id: int = 106688
     second_rank: float = 2
-    second_rank_points: float = 9500
+    second_rank_points: float = 8855
     second_age: float = 20
     second_height: float = 183
     winner: str = "Djokovic"
