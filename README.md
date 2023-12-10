@@ -5,3 +5,5 @@ MVP of the fourth Sprint of the graduate program in Software Engineering at PUC-
 Author: Alexandre Alves Marinho
 
 Please see /api/README.md and /front/README.md for detailed info on how to run this project
+
+Video presentation: https://www.youtube.com/watch?v=VRaTpiwq8Hg
